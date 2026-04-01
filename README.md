@@ -10,12 +10,17 @@ add them to their collection, add a comment or rate them.
 - Ruby
 - Create `.env` file and copie the content of [env.template](.env.template)
 
-## Run the project 
-- We have two way to run the project 
-  - with Docker 
-  - with the rails 
-
-### Start with rails
+### Initial set up
+- Run the command below
+```bash
+rails db:prepare db:create db:migrate db:fixtures:load
+```
+- it will
+  - prepare and create the database
+  - do all migration
+  - Load fixtures
+  
+### Launch server
 - Run the command below
 ```bash
 rails server 
