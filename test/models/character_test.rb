@@ -40,5 +40,4 @@ class CharacterTest < ActiveSupport::TestCase
     character = Character.new(name: "Cyno", description: "Cyno est un personnage Électro.", rarity: "top")
     assert_not character.valid?
   end
-  
 end
