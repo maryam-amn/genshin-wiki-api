@@ -5,7 +5,7 @@ class CharacterTest < ActiveSupport::TestCase
     character = Character.new(name: "Ayato",
                               description: " un personnage 5 étoiles Hydro jouable dans Genshin Impact, épéiste à une main et chef du Clan Kamisato à Inazuma.",
                               rarity: 5,
-                              region: "Inazuma")
+                              region: "Montstadt")
 
     assert character.rarity.between?(0, 5)
     assert character.valid?
