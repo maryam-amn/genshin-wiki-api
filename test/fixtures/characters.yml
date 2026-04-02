@@ -7,22 +7,17 @@ one:
   description: Charlotte est un personnage Cryo  4 étoile, journaliste pour L'Oiseau de vapeur, le célébre journal de Fontaine
   rarity: 4
   region: Fontaine
-  type:
-  average_counting: 9.99
+
 
 two:
   name: Furina
   description: Furina est un personnage Hydro  5 étoile. Elle est l'apparence mortelle actuelle de Foçalors, l'Archon Hydro actuel de Fontaine.
   rarity: 1
   region: Fontaine
-  type:
-  average_counting: 9.99
+
 
 three:
   name: Yanfei
   description: Yanfei est un personnage Pyro 4 étoiles de Genshin Impact qui utilise un catalyseur
   rarity: 4
   region: Liyue
-  type:
-  average_counting: 5
-

@@ -15,7 +15,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_26_162604) do
   enable_extension "pg_catalog.plpgsql"
 
   create_table "characters", force: :cascade do |t|
-    t.decimal "average_counting"
+    t.decimal "average_rating"
     t.datetime "created_at", null: false
     t.text "description"
     t.string "name"
