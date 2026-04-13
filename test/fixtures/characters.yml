@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# type is null but will be filed with 'playable' or 'boss' in the future
+
+charlotte_from_fontaine_region :
+  name: Charlotte
+  description: Charlotte est un personnage Cryo  4 étoile, journaliste pour L'Oiseau de vapeur, le célébre journal de Fontaine
+  rarity: 4
+  region: Fontaine
+
+
+furina_from_fontaine_region :
+  name: Furina
+  description: Furina est un personnage Hydro  5 étoile. Elle est l'apparence mortelle actuelle de Foçalors, l'Archon Hydro actuel de Fontaine.
+  rarity: 1
+  region: Fontaine
+
+
+yanfei_from_fontaine_region :
+  name: Yanfei
+  description: Yanfei est un personnage Pyro 4 étoiles de Genshin Impact qui utilise un catalyseur
+  rarity: 4
+  region: Liyue
