@@ -1,6 +1,6 @@
 class CreateCharacters < ActiveRecord::Migration[8.1]
   def change
-    create_enum :regions, %w[Liyue Fontaine Montstadt]
+    create_enum :regions, %w[ Montstadt Liyue  Inazuma Sumeru Fontaine Natlan ]
 
     create_table :characters do |t|
         t.string :name, null: false

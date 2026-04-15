@@ -8,13 +8,11 @@ charlotte_from_fontaine_region :
   rarity: 4
   region: Fontaine
 
-
 furina_from_fontaine_region :
   name: Furina
   description: Furina est un personnage Hydro  5 étoile. Elle est l'apparence mortelle actuelle de Foçalors, l'Archon Hydro actuel de Fontaine.
   rarity: 1
   region: Fontaine
-
 
 yanfei_from_fontaine_region :
   name: Yanfei
