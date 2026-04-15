@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_02_151754) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_14_073721) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "regions", ["Liyue", "Fontaine", "Montstadt"]
+  create_enum "regions", ["Liyue", "Fontaine", "Montstadt", "Inazuma", "Sumeru", "Natlan"]
 
   create_table "characters", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -24,6 +24,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_02_151754) do
     t.string "name", null: false
     t.integer "rarity", null: false
     t.enum "region", null: false, enum_type: "regions"
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at"
+    t.string "reset_password_token"
     t.datetime "updated_at", null: false
   end
 end
