@@ -4,7 +4,7 @@
 
 charlotte_from_fontaine_region :
   name: Charlotte
-  description: Charlotte est un personnage Cryo  4 étoile, journaliste pour L'Oiseau de vapeur, le célébre journal de Fontaine
+  description: Charlotte est un personnage Cryo 4 étoile, journaliste pour L'Oiseau de vapeur, le célébre journal de Fontaine
   rarity: 4
   region: Fontaine
 

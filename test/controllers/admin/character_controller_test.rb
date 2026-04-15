@@ -10,7 +10,7 @@ class Admin::CharacterControllerTest < ActionDispatch::IntegrationTest
   test "Should get index and show information of all character when the user is log in " do
     get admin_characters_url
     assert_response :success
-    character = characters(:charlotte)
+    character = characters(:charlotte_from_fontaine_region)
     assert_includes response.body, character.name
     assert_select("td.col.col-description", character.description)
   end
