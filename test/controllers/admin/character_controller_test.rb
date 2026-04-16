@@ -3,11 +3,8 @@ require "test_helper"
 class Admin::CharacterControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
-  setup do
-    sign_in users(:admin_users)
-  end
-
   test "Should get index and show information of all character when the user is log in " do
+    sign_in users(:admin_users)
     get admin_characters_url
     assert_response :success
     character = characters(:charlotte_from_fontaine_region)

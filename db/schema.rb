@@ -16,7 +16,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_073721) do
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "regions", ["Liyue", "Fontaine", "Montstadt", "Inazuma", "Sumeru", "Natlan"]
+  create_enum "regions", ["Liyue", "Fontaine", "Montstadt"]
 
   create_table "characters", force: :cascade do |t|
     t.datetime "created_at", null: false
