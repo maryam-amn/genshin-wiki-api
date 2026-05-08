@@ -19,3 +19,9 @@ yanfei_from_fontaine_region :
   description: Yanfei est un personnage Pyro 4 étoiles de Genshin Impact qui utilise un catalyseur
   rarity: 4
   region: Liyue
+
+eula_from_mondsatdt:
+  name: Eula
+  description: Eula Lawrence est un personnage Cryo jouable dans Genshin Impact. Descendante du tristement célèbre et tyrannique Clan Lawrence, Eula est la Capitaine de l'unité de reconnaissance de l'Ordre de Favonius.
+  rarity: 5
+  region: Montstadt
