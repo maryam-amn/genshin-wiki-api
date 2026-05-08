@@ -30,12 +30,51 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
     assert_equal response.parsed_body, character_to_json.as_json
   end
 
-  test "Should render a error if the character isn't found " do
+  test "Should render a error if the character isn't found" do
     get api_v1_character_url(id: 0)
 
     assert_response :not_found
 
     error_message = { "message" => "Character not found" }
+
+    assert_equal response.parsed_body, error_message.as_json
+  end
+
+  test "Should create a character and render it when all fields are filled in" do
+    post api_v1_characters_url params: { character: { name: "xxxxxxx", description: "xxxxxx est un personnage Hydro jouable dans Genshin Impact", rarity: 2, region: "Liyue" } }
+
+    assert_response :created
+
+    character = Character.last
+    character_to_json = CharacterJson.new(character:).to_h
+
+    assert_equal response.parsed_body, character_to_json.as_json
+  end
+
+  test "Shouldn't create a character with the same name as another one" do
+    post api_v1_characters_url params: { character: { name: "Yanfei", description: "Yanfei est un personnage Pyro 4 étoiles de Genshin Impact qui utilise un catalyseur", rarity: 4, region: "Liyue" } }
+
+    assert_response :unprocessable_entity
+
+    error_message = {
+      "name": [
+        "has already been taken"
+      ]
+    }
+
+    assert_equal response.parsed_body, error_message.as_json
+  end
+
+  test "Shouldn't create a character when a required field is blank" do
+    post api_v1_characters_url params: { character: { name: "xxxx", description: "C'est un personnage Cyro 4 étoiles", rarity: 4, region: "" } }
+
+    assert_response :unprocessable_entity
+
+    error_message = {
+      "region": [
+        "choose a region from the list, can't be blank"
+      ]
+    }
 
     assert_equal response.parsed_body, error_message.as_json
   end
