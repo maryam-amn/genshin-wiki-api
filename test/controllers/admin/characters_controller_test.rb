@@ -5,7 +5,9 @@ class Admin::CharactersControllerTest < ActionDispatch::IntegrationTest
 
   test "Should get index and show information of all characters when the user is logged in " do
     sign_in users(:admin_users)
+
     get admin_characters_url
+
     assert_response :success
     character = characters(:charlotte_from_fontaine_region)
     assert_includes response.body, character.name
@@ -14,13 +16,16 @@ class Admin::CharactersControllerTest < ActionDispatch::IntegrationTest
 
   test "shouldn't get index and show information when the user isn't logged in" do
     sign_out :user
+
     get admin_characters_url
+
     assert_response :redirect
     assert_redirected_to new_user_session_path
   end
 
   test "we should be able to create a new user" do
     sign_in users(:admin_users)
+
     assert_difference -> { Character.count } => +1 do
       post admin_characters_path, params: {
         character: {
@@ -48,6 +53,7 @@ class Admin::CharactersControllerTest < ActionDispatch::IntegrationTest
           description: "un personnage 3 étoiles" }
       }
     end
+
     assert_response :redirect
     assert_not_includes Character.last&.name.to_s, "Yelan"
   end
