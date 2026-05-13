@@ -78,4 +78,37 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal response.parsed_body, error_message.as_json
   end
+
+  test "Should be able to delete a character" do
+    character = characters(:yanfei_from_fontaine_region)
+
+    delete api_v1_character_url(id: character.id)
+
+    assert_response :ok
+
+    message = { message: "Character deleted" }
+    assert_equal response.parsed_body, message.as_json
+  end
+
+  test "Shouldn't be able to delete a character that doesn't exist" do
+    delete api_v1_character_url(id: 0)
+
+    assert_response :not_found
+
+    message = { message: "Character not found" }
+
+    assert_equal response.parsed_body, message.as_json
+  end
+
+  test "Should render a message when the character is a 5 star and was not destroy from the database" do
+    character = characters(:eula_from_mondsatdt)
+
+    delete api_v1_character_url(id: character.id)
+
+    assert_response :unprocessable_entity
+
+    error_message = "Shouldn't delete legendary characters"
+
+    assert_includes response.parsed_body[:message], error_message.as_json
+  end
 end

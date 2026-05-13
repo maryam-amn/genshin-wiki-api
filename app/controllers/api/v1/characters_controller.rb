@@ -36,4 +36,21 @@ class Api::V1::CharactersController < ApiController
           render json: character.errors, status: :unprocessable_entity
         end
       end
+
+      api :DELETE, "/characters/:id", "delete a character"
+      api_version "v1"
+      returns code: 200
+      error :not_found, "character not found"
+      error :unprocessable_entity, "legendary character shouldn't be deleted"
+
+      def destroy
+        character = Character.find(params[:id])
+        if character.destroy
+          render json: { message: "Character deleted" }, status: :ok
+        else
+          render json: { message: "Character can not be deleted, #{character.errors[:base].to_a.join(' ')}" }, status: :unprocessable_entity
+        end
+      rescue ActiveRecord::RecordNotFound
+        render json: { message: "Character not found" }, status: :not_found
+      end
 end
