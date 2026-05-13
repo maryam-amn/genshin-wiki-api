@@ -44,16 +44,13 @@ class Api::V1::CharactersController < ApiController
       error :unprocessable_entity, "legendary character shouldn't be deleted"
 
       def destroy
-        begin
-          character = Character.find(params[:id])
-        rescue ActiveRecord::RecordNotFound
-          render json: { message: "Character not found" }, status: :not_found
+        character = Character.find(params[:id])
+        if character.destroy
+          render json: { message: "Character deleted" }, status: :ok
         else
-          if character.destroy && character.destroyed?
-            render json: { message: "Character deleted" }, status: :ok
-          else
-            render json: { message: "Character can not be deleted, #{character.errors[:base].to_a.join(' ')}" }, status: :unprocessable_entity
-          end
+          render json: { message: "Character can not be deleted, #{character.errors[:base].to_a.join(' ')}" }, status: :unprocessable_entity
         end
+      rescue ActiveRecord::RecordNotFound
+        render json: { message: "Character not found" }, status: :not_found
       end
 end
