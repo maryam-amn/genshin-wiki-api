@@ -53,4 +53,20 @@ class Api::V1::CharactersController < ApiController
       rescue ActiveRecord::RecordNotFound
         render json: { message: "Character not found" }, status: :not_found
       end
+      api :PATCH, "/characters/:id", "update a character"
+      api_version "v1"
+      returns code: 200
+      error :not_found, "character not found"
+      error :unprocessable_entity, "can't update a character who doesn't follow the model's validation"
+
+      def update
+        character = Character.find(params[:id])
+        if character.update(params.permit(:name, :description, :rarity, :region))
+          render json: CharacterJson.new(character:).to_h, status: :ok
+        else
+          render json: character.errors, status:  :unprocessable_content
+        end
+      rescue ActiveRecord::RecordNotFound
+        render status: :not_found, json: { message: "Character not found" }
+      end
 end
