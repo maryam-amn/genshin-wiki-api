@@ -59,6 +59,12 @@ class Api::V1::CharactersController < ApiController
       error :not_found, "character not found"
       error :unprocessable_entity, "can't update a character who doesn't follow the model's validation"
 
+      api :PUT, "/characters/:id", "update a character"
+      api_version "v1"
+      returns code: 200
+      error :not_found, "character not found"
+      error :unprocessable_entity, "can't update a character who doesn't follow the model's validation"
+
       def update
         character = Character.find(params[:id])
         if character.update(params.permit(:name, :description, :rarity, :region))
