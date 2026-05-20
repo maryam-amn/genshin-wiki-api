@@ -1,4 +1,8 @@
 class Api::V1::CharactersController < ApiController
+      resource_description  do
+        formats ['json']
+      end
+
       api :GET, "/characters", "list of all characters"
       api_version "v1"
       returns code: 200
@@ -57,17 +61,19 @@ class Api::V1::CharactersController < ApiController
       api :PATCH, "/characters/:id", "update some character's fields"
       api_version "v1"
       returns code: 200
+      param :id, Integer, desc: "Character ID", required: true
       error :not_found, "character not found"
       error :unprocessable_entity, "can't update a character who doesn't follow the model's validation"
 
-      api :PUT, "/characters/:id", "update a character's field , when every field is present with its value"
+      api :PUT, '/resources/:id', 'Update a resource (full replacement)'
       api_version "v1"
+      param :id, Integer, desc: "Character ID", required: true
       returns code: 200
       error :not_found, "character not found"
       error :unprocessable_entity, "can't update a character who doesn't follow the model's validation"
 
       def update
-        character = Character.find(params.expect(:id))
+        character = Character.find(params.permit(:id)[:id])
         if character.update(params.permit(:name, :description, :rarity, :region))
           render json: CharacterJson.new(character:).to_h, status: :ok
         else

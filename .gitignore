@@ -41,3 +41,5 @@
 # Ignore Node Module
 /node_modules
 
+# ignore the apipie file
+/config/initializers/apipie.rb
