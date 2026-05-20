@@ -154,7 +154,7 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
     character = characters(:eula_from_mondsatdt)
 
     put api_v1_character_url(id: character.id),
-          params: { description: "Eula Lawrence est un personnage Cryo jouable dans Genshin Impact", rarity: 4, region: "Fontaine", name: "Eula"}
+          params: { description: "Eula Lawrence est un personnage Cryo jouable dans Genshin Impact", rarity: 4, region: "Fontaine", name: "Eula" }
 
     assert_response :success
 
@@ -179,7 +179,7 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
   test "Can't update a character with the same name as another one with" do
     character = characters(:eula_from_mondsatdt)
 
-    put api_v1_character_url(id: character.id), params: { name: "Yanfei" , description: "Eula Lawrence est un personnage Cryo jouable dans Genshin Impact", rarity: 4, region: "Fontaine"}
+    put api_v1_character_url(id: character.id), params: { name: "Yanfei", description: "Eula Lawrence est un personnage Cryo jouable dans Genshin Impact", rarity: 4, region: "Fontaine" }
 
     assert_response :unprocessable_entity
 
