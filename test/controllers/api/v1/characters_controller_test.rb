@@ -145,20 +145,16 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
 
-    error_message = {
-      "name": [
-        "has already been taken"
-      ]
-    }
+    error_message =  "has already been taken"
 
-    assert_equal response.parsed_body, error_message.as_json
+    assert_includes response.parsed_body[:message], error_message.as_json
   end
 
   test "Should update a character" do
     character = characters(:eula_from_mondsatdt)
 
     put api_v1_character_url(id: character.id),
-          params: { description: "Eula Lawrence est un personnage Cryo jouable dans Genshin Impact" }
+          params: { description: "Eula Lawrence est un personnage Cryo jouable dans Genshin Impact", rarity: 4, region: "Fontaine", name: "Eula"}
 
     assert_response :success
 
@@ -171,7 +167,7 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
 
   test "Can't update a character that doesn't exist" do
     put api_v1_character_url(id: 0),
-          params: { description:  "Eula Lawrence est un personnage Cryo jouable dans Genshin Impact" }
+          params: { description:  "Eula Lawrence est un personnage Cryo jouable dans Genshin Impact", name: "Charlotte", rarity: 4, region: "Fontaine" }
 
     assert_response :not_found
 
@@ -183,16 +179,12 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
   test "Can't update a character with the same name as another one with" do
     character = characters(:eula_from_mondsatdt)
 
-    put api_v1_character_url(id: character.id), params: { name: "Yanfei" }
+    put api_v1_character_url(id: character.id), params: { name: "Yanfei" , description: "Eula Lawrence est un personnage Cryo jouable dans Genshin Impact", rarity: 4, region: "Fontaine"}
 
     assert_response :unprocessable_entity
 
-    error_message = {
-      "name": [
-        "has already been taken"
-      ]
-    }
+    error_message = "has already been taken"
 
-    assert_equal response.parsed_body, error_message.as_json
+    assert_includes response.parsed_body[:message], error_message.as_json
   end
 end
