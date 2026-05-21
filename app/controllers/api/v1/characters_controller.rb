@@ -58,17 +58,11 @@ class Api::V1::CharactersController < ApiController
         render json: { message: "Character not found" }, status: :not_found
       end
 
+      api :PUT, "/characters/:id", "Update a resource (full replacement)"
       api :PATCH, "/characters/:id", "update some character's fields"
       api_version "v1"
       returns code: 200
       param :id, :number, desc: "Character ID", required: true
-      error :not_found, "character not found"
-      error :unprocessable_entity, "can't update a character who doesn't follow the model's validation"
-
-      api :PUT, "/resources/:id", "Update a resource (full replacement)"
-      api_version "v1"
-      param :id, :number, desc: "Character ID", required: true
-      returns code: 200
       error :not_found, "character not found"
       error :unprocessable_entity, "can't update a character who doesn't follow the model's validation"
 
