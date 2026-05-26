@@ -111,4 +111,80 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
 
     assert_includes response.parsed_body[:message], error_message.as_json
   end
+
+  test "Should be able to update a character" do
+    character = characters(:eula_from_mondsatdt)
+
+    patch api_v1_character_url(id: character.id),
+          params: { description: "Eula Lawrence est un personnage Cryo jouable dans Genshin Impact" }
+
+    assert_response :success
+
+    character.reload
+
+    character_to_json = CharacterJson.new(character:).to_h
+
+    assert_equal response.parsed_body, character_to_json.as_json
+  end
+
+   test "Shouldn't be able to update a character that doesn't exist" do
+     patch api_v1_character_url(id: 0),
+           params: { description:  "Eula Lawrence est un personnage Cryo jouable dans Genshin Impact" }
+
+     assert_response :not_found
+
+     message = { message: "Character not found" }
+
+     assert_equal response.parsed_body, message.as_json
+   end
+
+  test "Shouldn't be able to update a character with the same name as another one" do
+    character = characters(:eula_from_mondsatdt)
+
+    patch api_v1_character_url(id: character.id), params: { name: "Yanfei" }
+
+    assert_response :unprocessable_entity
+
+    error_message =  "has already been taken"
+
+    assert_includes response.parsed_body[:message], error_message.as_json
+  end
+
+  test "Should update a character" do
+    character = characters(:eula_from_mondsatdt)
+
+    put api_v1_character_url(id: character.id),
+          params: { description: "Eula Lawrence est un personnage Cryo jouable dans Genshin Impact", rarity: 4, region: "Fontaine", name: "Eula" }
+
+    assert_response :success
+
+    character.reload
+
+    character_to_json = CharacterJson.new(character:).to_h
+
+    assert_equal response.parsed_body, character_to_json.as_json
+  end
+
+  test "Can't update a character that doesn't exist" do
+    put api_v1_character_url(id: 0),
+          params: { description:  "Eula Lawrence est un personnage Cryo jouable dans Genshin Impact", name: "Charlotte", rarity: 4, region: "Fontaine" }
+
+    assert_response :not_found
+
+    message = { message: "Character not found" }
+
+    assert_equal response.parsed_body, message.as_json
+  end
+
+  test "Can't update a character with the same name as another one with" do
+    character = characters(:eula_from_mondsatdt)
+
+    put api_v1_character_url(id: character.id), params: { name: "Yanfei", description: "Eula Lawrence est un personnage Cryo jouable dans Genshin Impact", rarity: 4, region: "Fontaine" }
+
+    assert_response :unprocessable_entity
+
+    error_message = "has already been taken"
+
+    assert_includes response.parsed_body[:message], error_message.as_json
+  end
 end
