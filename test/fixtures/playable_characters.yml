@@ -1,13 +1,27 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 charlotte_from_fontaine_region:
+  id: 944569428,
   base_hp: 902.67
   base_attack: 14.51
   base_defense: 45.78
   is_limited: true
 
 furina_from_fontaine_region:
+  id: 867337943,
   base_hp: 1191.65
   base_attack: 18.99
   base_defense: 54.15
   is_limited: true
+yanfei_from_fontaine_region:
+  id: 867337945,
+  base_hp: 1191.65
+  base_attack: 18.99
+  base_defense: 54.15
+  is_limited: true
+eula_from_mondsatdt:
+    id: 867337946,
+    base_hp: 1191.65
+    base_attack: 18.99
+    base_defense: 54.15
+    is_limited: true

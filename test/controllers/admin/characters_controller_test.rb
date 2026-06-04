@@ -53,7 +53,6 @@ class Admin::CharactersControllerTest < ActionDispatch::IntegrationTest
           description: "un personnage 3 étoiles" }
       }
     end
-
     assert_response :redirect
     assert_not_includes Character.last&.name.to_s, "Yelan"
   end
@@ -67,5 +66,15 @@ class Admin::CharactersControllerTest < ActionDispatch::IntegrationTest
     assert_equal :rarity, character.errors.first.attribute
     assert_equal :blank, character.errors.first.type
     assert_not_includes Character.last&.name.to_s, "Ganyu"
+  end
+
+  test "Should redirect to the playable character show page" do
+    sign_in users(:admin_users)
+    character = characters(:charlotte_from_fontaine_region)
+
+    get admin_character_url(character.id)
+
+    assert_response :redirect
+    assert_redirected_to admin_playable_character_path(character.id)
   end
 end

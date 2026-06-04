@@ -12,11 +12,11 @@ class Character < ApplicationRecord
   before_destroy :check_legendary_character
 
   def self.ransackable_associations(_auth_object = nil)
-    %w[rarity region]
+    %w[rarity region characterable_type characterable_id]
   end
 
   def self.ransackable_attributes(_auth_object = nil)
-    %w[rarity region]
+    %w[rarity region characterable_type characterable_id]
   end
 
   def check_legendary_character
