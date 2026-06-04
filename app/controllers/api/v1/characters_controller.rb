@@ -29,7 +29,7 @@ class Api::V1::CharactersController < ApiController
       api :POST, "/characters", "create a character"
       api_version "v1"
       returns code: 201
-      error :unprocessable_entity, "a required field is missing/blank or the character's name isn't unique so the character cannot be created "
+      error :unprocessable_content, "a required field is missing/blank or the character's name isn't unique so the character cannot be created "
 
       def create
         character = Character.new(params.expect(character: [ :name, :description, :rarity, :region ]))
@@ -37,7 +37,7 @@ class Api::V1::CharactersController < ApiController
         if character.save
           render json: CharacterJson.new(character:).to_h, status: :created
         else
-          render json: character.errors, status: :unprocessable_entity
+          render json: character.errors, status: :unprocessable_content
         end
       end
 
@@ -45,14 +45,14 @@ class Api::V1::CharactersController < ApiController
       api_version "v1"
       returns code: 200
       error :not_found, "character not found"
-      error :unprocessable_entity, "legendary character shouldn't be deleted"
+      error :unprocessable_content, "legendary character shouldn't be deleted"
 
       def destroy
         character = Character.find(params[:id])
         if character.destroy
           render json: { message: "Character deleted" }, status: :ok
         else
-          render json: { message: "Character can not be deleted, #{character.errors[:base].to_a.join(' ')}" }, status: :unprocessable_entity
+          render json: { message: "Character can not be deleted, #{character.errors[:base].to_a.join(' ')}" }, status: :unprocessable_content
         end
       rescue ActiveRecord::RecordNotFound
         render json: { message: "Character not found" }, status: :not_found
@@ -64,14 +64,14 @@ class Api::V1::CharactersController < ApiController
       returns code: 200
       param :id, :number, desc: "Character ID", required: true
       error :not_found, "character not found"
-      error :unprocessable_entity, "can't update a character who doesn't follow the model's validation"
+      error :unprocessable_content, "can't update a character who doesn't follow the model's validation"
 
       def update
         character = Character.find(params.permit(:id)[:id])
         if character.update(params.permit(:name, :description, :rarity, :region))
           render json: CharacterJson.new(character:).to_h, status: :ok
         else
-          render json: { message: "Character can not be deleted, #{character.errors.to_a.join(', ')}" }, status: :unprocessable_entity
+          render json: { message: "Character can not be deleted, #{character.errors.to_a.join(', ')}" }, status: :unprocessable_content
         end
       rescue ActiveRecord::RecordNotFound
         render status: :not_found, json: { message: "Character not found" }
