@@ -1,4 +1,8 @@
 class Character < ApplicationRecord
+  delegated_type :characterable, types: %w[ PlayableCharacter ], dependent: :destroy,
+                 optional: true
+  delegate :who_am_i, to: :characterable
+
   validates :name, presence: true, uniqueness: true
   validates :description, presence: true,  length: { maximum: 400 }
   validates :rarity, presence: true, numericality:  { only_integer: true, message: I18n.t("Characters.errors.number_presence") },

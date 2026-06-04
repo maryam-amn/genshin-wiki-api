@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+charlotte_from_fontaine_region:
+  base_hp: 902.67
+  base_attack: 14.51
+  base_defense: 45.78
+  is_limited: true
+
+furina_from_fontaine_region:
+  base_hp: 1191.65
+  base_attack: 18.99
+  base_defense: 54.15
+  is_limited: true

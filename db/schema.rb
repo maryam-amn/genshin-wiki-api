@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_14_073721) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_28_120512) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -19,11 +19,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_073721) do
   create_enum "regions", ["Liyue", "Fontaine", "Montstadt"]
 
   create_table "characters", force: :cascade do |t|
+    t.integer "characterable_id"
+    t.string "characterable_type"
     t.datetime "created_at", null: false
     t.text "description", null: false
     t.string "name", null: false
     t.integer "rarity", null: false
     t.enum "region", null: false, enum_type: "regions"
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "playable_characters", force: :cascade do |t|
+    t.float "base_attack"
+    t.float "base_defense"
+    t.float "base_hp"
+    t.datetime "created_at", null: false
+    t.boolean "is_limited", default: false
     t.datetime "updated_at", null: false
   end
 
@@ -35,5 +46,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_073721) do
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
 end
