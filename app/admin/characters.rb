@@ -1,6 +1,6 @@
 ActiveAdmin.register Character do
   permit_params :name, :region, :rarity, :description, :character_id
-  before_action :find_character
+  before_action :find_character, only: [ :show ]
 
   actions :all, except: [ :destroy, :update ]
   filter :rarity
