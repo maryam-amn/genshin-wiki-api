@@ -44,6 +44,8 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :redirect
 
+    assert_redirected_to new_user_session_url
+
     assert_not_equal  PlayableCharacter.last&.base_hp.to_f, 150.0
     assert_not_equal  PlayableCharacter.last&.name.to_s, "Fischl"
   end
