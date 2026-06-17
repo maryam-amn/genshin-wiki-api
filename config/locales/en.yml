@@ -38,4 +38,4 @@ en:
         number_between_1_5: "must be between 1 and 5"
         choose_region: "choose a region from the list, can't be blank"
   Playable_Characters:
-      new: "Add new a playable character"
+      new: "Add a new  playable character"

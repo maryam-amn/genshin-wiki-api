@@ -36,10 +36,10 @@ ActiveAdmin.register PlayableCharacter do
 
   controller do
     def create
-      playable_character =  PlayableCharacter.create(params.expect([ playable_character: [ :base_hp, :base_defense, :base_attack, :is_limited ] ]))
-      character = Character.create(params.expect([ playable_character: [ :name, :description, :rarity, :region ] ]).merge(characterable: playable_character))
+      playable_character =  PlayableCharacter.new(params.expect([ playable_character: [ :base_hp, :base_defense, :base_attack, :is_limited ] ]))
+      character = Character.new(params.expect([ playable_character: [ :name, :description, :rarity, :region ] ]).merge(characterable: playable_character))
 
-      if character.save
+      if playable_character.save && character.save
         flash[:notice] = "Character successfully created"
         redirect_to admin_playable_character_path(playable_character.id)
       else

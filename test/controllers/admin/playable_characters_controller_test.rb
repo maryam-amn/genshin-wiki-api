@@ -22,6 +22,8 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :redirect
 
+    assert_redirected_to admin_playable_character_path(PlayableCharacter.last.id)
+
     assert_equal  PlayableCharacter.last&.base_hp.to_f, 150.0
     assert_equal  PlayableCharacter.last&.name.to_s, "Fischl"
     end
