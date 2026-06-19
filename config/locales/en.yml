@@ -33,9 +33,13 @@ en:
       new:
         add: "Add a Character"
         info: "Fill in all the fields about the character "
+      destroy:
+        record_not_destroyed: "Shouldn't delete legendary character"
       errors:
         number_presence: "must be a number"
         number_between_1_5: "must be between 1 and 5"
         choose_region: "choose a region from the list, can't be blank"
   Playable_Characters:
-      new: "Add a new  playable character"
+      new: "Add new a playable character"
+      destroy:
+        notice: "Character successfully deleted !"

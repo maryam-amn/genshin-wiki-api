@@ -21,7 +21,7 @@ class Character < ApplicationRecord
 
   def check_legendary_character
     if rarity == 5
-      errors.add(:base, "Shouldn't delete legendary characters")
+      errors.add(:base, I18n.t("Characters.destroy.record_not_destroyed"))
       throw :abort
     end
   end
