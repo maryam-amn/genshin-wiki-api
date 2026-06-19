@@ -100,5 +100,4 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
 
     assert_includes flash[:alert], I18n.t("Playable_Characters.create.record_invalid")
   end
-
 end
