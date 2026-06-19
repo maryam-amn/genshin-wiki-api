@@ -36,16 +36,15 @@ ActiveAdmin.register PlayableCharacter do
 
   controller do
     def create
-      playable_character =  PlayableCharacter.new(params.expect([ playable_character: [ :base_hp, :base_defense, :base_attack, :is_limited ] ]))
-      character = Character.new(params.expect([ playable_character: [ :name, :description, :rarity, :region ] ]).merge(characterable: playable_character))
-
-      if playable_character.save && character.save
-        flash[:notice] = "Character successfully created"
-        redirect_to admin_playable_character_path(playable_character.id)
-      else
-        flash[:error] =  character.errors.full_messages + playable_character.errors.full_messages
-        redirect_to new_admin_playable_character_path
+      ActiveRecord::Base.transaction do
+        @playable_character =  PlayableCharacter.create!(params.expect([ playable_character: [ :base_hp, :base_defense, :base_attack, :is_limited ] ]))
+        @character = Character.create!(params.expect([ playable_character: [ :name, :description, :rarity, :region ] ]).merge(characterable: @playable_character))
       end
+        flash[:notice] = I18n.t("Playable_Characters.create.notice")
+        redirect_to admin_playable_character_path(@playable_character.id)
+    rescue ActiveRecord::RecordInvalid => e
+        flash[:alert] = "#{I18n.t("Playable_Characters.create.record_invalid")}, #{e}"
+        redirect_to new_admin_playable_character_path
     end
   end
 end

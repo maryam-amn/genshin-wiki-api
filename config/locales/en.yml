@@ -39,3 +39,6 @@ en:
         choose_region: "choose a region from the list, can't be blank"
   Playable_Characters:
       new: "Add a new  playable character"
+      create:
+        notice: "Character successfully created"
+        record_invalid: "Character can't be created"
