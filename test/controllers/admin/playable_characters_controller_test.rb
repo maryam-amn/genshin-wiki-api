@@ -6,7 +6,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
   test "Should be able to create a playable characters when the user is logged in and all the field are fill in" do
     sign_in users(:admin_users)
 
-    assert_difference -> { Character.count && PlayableCharacter.count } => +1 do
+    assert_difference -> { Character.count } => +1, -> { PlayableCharacter.count } => +1 do
       post admin_playable_characters_path, params: {
         playable_character: {
           name: "Fischl",
@@ -32,7 +32,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
   test "Shouldn't be able to create a playable characters when the user is not logged in" do
     sign_out :user
 
-    assert_difference -> { Character.count && PlayableCharacter.count } => 0 do
+    assert_difference -> { Character.count } => 0, -> { PlayableCharacter.count } => 0  do
       post admin_playable_characters_path, params: {
         playable_character: {
           name: "Fischl",
@@ -56,7 +56,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
   test "we shouldn't be able to create a playable characters if the character's field are not valid" do
     sign_in users(:admin_users)
 
-    assert_difference -> { Character.count && PlayableCharacter.count } => 0 do
+    assert_difference -> { Character.count } => 0, -> { PlayableCharacter.count } => 0 do
       post admin_playable_characters_path, params: {
         playable_character: {
           name: "Fischl",
@@ -80,7 +80,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
   test "we shouldn't be able to create a playable characters if the playable character's field are not valid" do
     sign_in users(:admin_users)
 
-    assert_difference -> { Character.count && PlayableCharacter.count } => 0 do
+    assert_difference -> { Character.count } => 0, -> { PlayableCharacter.count } => 0 do
       post admin_playable_characters_path, params: {
         playable_character: {
           name: "Fischl",
