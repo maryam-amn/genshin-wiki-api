@@ -80,7 +80,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
   test "we shouldn't be able to create a playable characters if the playable character's field are not valid" do
     sign_in users(:admin_users)
 
-    assert_difference ->{ Character.count } => 0, -> { PlayableCharacter.count } => 0 do
+    assert_difference -> { Character.count } => 0, -> { PlayableCharacter.count } => 0 do
       post admin_playable_characters_path, params: {
         playable_character: {
           name: "Fischl",
