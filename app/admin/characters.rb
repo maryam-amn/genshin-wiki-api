@@ -7,6 +7,9 @@ ActiveAdmin.register Character do
   filter :region, as: :select, collection: proc { Character.regions.keys }
   filter :characterable_type, as: :select, collection: proc { Character.characterable_types }, label: "Characters Type"
 
+  action_item :get, only: :index  do
+    link_to "New playable a character", new_admin_playable_character_path
+  end
     index do
       column :name
       column :region
