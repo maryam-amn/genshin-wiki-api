@@ -125,6 +125,6 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     assert_redirected_to admin_characters_path
 
-    assert_includes flash[:alert], I18n.t("Characters.destroy.record_not_destroyed")
+    assert_includes flash[:error], I18n.t("Characters.destroy.should_not_delete_legendary_character")
   end
 end

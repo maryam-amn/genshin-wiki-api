@@ -56,7 +56,7 @@ ActiveAdmin.register PlayableCharacter do
       flash[:notice] = I18n.t("Playable_Characters.destroy.notice")
       redirect_to admin_characters_path
     rescue ActiveRecord::RecordNotDestroyed => e
-      flash[:alert] = "  #{e}, #{ @playable_character.character.errors[:base].to_a.join(' ')}"
+      flash[:error] = "#{e}, #{ @playable_character.character.errors[:base].to_a.join(' ')}"
       redirect_to admin_characters_path
     end
 
