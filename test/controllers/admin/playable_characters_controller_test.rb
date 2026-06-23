@@ -104,7 +104,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:admin_users)
     character = playable_characters(:yanfei_from_fontaine_region)
 
-    assert_difference -> { PlayableCharacter.count  && Character.count }, -1  do
+    assert_difference [ -> { PlayableCharacter.count }, -> { Character.count } ], -1 do
       delete admin_playable_character_path(id: character.id)
     end
 
@@ -118,7 +118,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:admin_users)
     character = playable_characters(:eula_from_mondsatdt)
 
-    assert_difference -> { PlayableCharacter.count  && Character.count }, 0 do
+    assert_difference [ -> { PlayableCharacter.count }, -> { Character.count } ], 0 do
       delete admin_playable_character_path(id: character.id)
     end
 
