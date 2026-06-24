@@ -67,7 +67,7 @@ ActiveAdmin.register PlayableCharacter do
        @playable_character.update!(params.expect([ playable_character: [ :base_hp, :base_defense, :base_attack, :is_limited ] ]))
        @playable_character.character.update!(params.expect([ playable_character: [ :name, :description, :rarity, :region ] ]))
       end
-      flash[:notice] = I18n.t("Playable_Characters.update.notice")
+      flash[:notice] = I18n.t("Playable_Characters.update.success")
       redirect_to admin_playable_character_path(@playable_character.id)
     rescue ActiveRecord::RecordInvalid  => e
       flash[:error] = "#{I18n.t("Playable_Characters.update.record_invalid")}, #{e}"
