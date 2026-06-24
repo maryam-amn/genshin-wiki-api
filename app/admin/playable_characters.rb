@@ -1,7 +1,9 @@
 ActiveAdmin.register PlayableCharacter do
    permit_params :base_attack, :base_defense, :base_hp, :is_limited
-   actions :all, except: [ :destroy, :update ]
-  menu false
+   before_action :find_playable_character, only: [ :destroy ]
+
+   actions :all, except: [ :update ]
+   menu false
 
   show do
     attributes_table do
@@ -45,6 +47,21 @@ ActiveAdmin.register PlayableCharacter do
     rescue ActiveRecord::RecordInvalid => e
         flash[:alert] = "#{I18n.t("Playable_Characters.create.record_invalid")}, #{e}"
         redirect_to new_admin_playable_character_path
+    end
+
+    def destroy
+      ActiveRecord::Base.transaction do
+        @playable_character.character.destroy!
+      end
+      flash[:notice] = I18n.t("Playable_Characters.destroy.notice")
+      redirect_to admin_characters_path
+    rescue ActiveRecord::RecordNotDestroyed => e
+      flash[:error] = "#{e}, #{ @playable_character.character.errors[:base].to_a.join(' ')}"
+      redirect_to admin_characters_path
+    end
+
+    def find_playable_character
+      @playable_character = PlayableCharacter.find(params[:id])
     end
   end
 end

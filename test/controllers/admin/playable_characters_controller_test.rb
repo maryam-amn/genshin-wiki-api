@@ -100,4 +100,31 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
 
     assert_includes flash[:alert], I18n.t("Playable_Characters.create.record_invalid")
   end
+  test "Should be able to delete a playable character" do
+    sign_in users(:admin_users)
+    character = playable_characters(:yanfei_from_fontaine_region)
+
+    assert_difference [ -> { PlayableCharacter.count }, -> { Character.count } ], -1 do
+      delete admin_playable_character_path(id: character.id)
+    end
+
+    assert_response :redirect
+    assert_redirected_to admin_characters_path
+
+    assert_includes flash[:notice], I18n.t("Playable_Characters.destroy.notice")
+  end
+
+  test "Shouldn't be able to delete a playable character who is a 5 star" do
+    sign_in users(:admin_users)
+    character = playable_characters(:eula_from_mondsatdt)
+
+    assert_difference [ -> { PlayableCharacter.count }, -> { Character.count } ], 0 do
+      delete admin_playable_character_path(id: character.id)
+    end
+
+    assert_response :redirect
+    assert_redirected_to admin_characters_path
+
+    assert_includes flash[:error], I18n.t("Characters.destroy.should_not_delete_legendary_character")
+  end
 end
