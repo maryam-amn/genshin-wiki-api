@@ -226,7 +226,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
     assert_equal 14.51, playable_character.base_attack
   end
 
-  test "Shouldn't be able to update the playable character if the character's name isn't unique using a PUT request" do
+  test "Should render an error and shouldn't update the object in the database (rollback) if i have the same name as another playable character using a PUT request" do
     playable_character = playable_characters(:furina_from_fontaine_region)
 
     put admin_playable_character_path(id: playable_character.id), params: {
@@ -245,7 +245,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
     assert_not_equal 50, playable_character.base_attack
   end
 
-  test "Shouldn't be able to update the playable character if the character's name is already taken using a PATCH request" do
+  test "Should render an error and shouldn't update the object in the database (rollback) if i have the same name as another playable character using a PATCH request" do
     playable_character = playable_characters(:charlotte_from_fontaine_region)
     patch admin_playable_character_path(id: playable_character.id), params: {
       playable_character: {
