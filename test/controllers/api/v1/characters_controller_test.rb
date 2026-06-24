@@ -107,7 +107,7 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
 
-    error_message = I18n.t("Characters.destroy.record_not_destroyed")
+    error_message = I18n.t("Characters.destroy.should_not_delete_legendary_character")
 
     assert_includes response.parsed_body[:message], error_message.as_json
   end
