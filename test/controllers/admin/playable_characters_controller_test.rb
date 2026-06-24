@@ -188,7 +188,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
 
     patch admin_playable_character_path(id: playable_character.id), params: {
       playable_character: {
-        description: "Yanfei est un personnawwwge Pyro 4 étoiles de Gens...",
+        description: " Yanfei est un personnage Pyro 4 étoiles de Genshin Impact qui utilise un catalyseur",
         name: "Yanfei",
         rarity: 4,
         region: "",
@@ -201,15 +201,15 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to edit_admin_playable_character_path
 
     playable_character.reload
-    assert_includes flash[:alert], I18n.t("Playable_Characters.update.record_invalid")
+    assert_includes flash[:error], I18n.t("Playable_Characters.update.record_invalid")
 
-    assert_not_equal "", playable_character.region
-    assert_not_equal "", playable_character.base_attack
+    assert_equal "Liyue", playable_character.region
+    assert_equal 20.12, playable_character.base_attack
   end
 
   test "Can't update a playable character if the field is blank" do
     sign_in users(:admin_users)
-    playable_character = playable_characters(:yanfei_from_fontaine_region)
+    playable_character = playable_characters(:charlotte_from_fontaine_region)
 
     put admin_playable_character_path(id: playable_character.id), params: {
       playable_character: {
@@ -228,9 +228,9 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to edit_admin_playable_character_path
 
     playable_character.reload
-    assert_includes flash[:alert], I18n.t("Playable_Characters.update.record_invalid")
+    assert_includes flash[:error], I18n.t("Playable_Characters.update.record_invalid")
 
-    assert_not_equal "", playable_character.region
-    assert_not_equal "", playable_character.base_attack
+    assert_equal "Fontaine", playable_character.region
+    assert_equal 14.51, playable_character.base_attack
   end
 end

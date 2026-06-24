@@ -70,7 +70,7 @@ ActiveAdmin.register PlayableCharacter do
       flash[:notice] = I18n.t("Playable_Characters.update.notice")
       redirect_to admin_playable_character_path(@playable_character.id)
     rescue ActiveRecord::RecordInvalid  => e
-      flash[:alert] = " #{I18n.t("Playable_Characters.update.record_invalid")}, #{e}"
+      flash[:error] = "#{I18n.t("Playable_Characters.update.record_invalid")}, #{e}"
       redirect_to edit_admin_playable_character_path
     end
     def find_playable_character
