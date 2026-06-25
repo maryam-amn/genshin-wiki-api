@@ -1,6 +1,6 @@
 ActiveAdmin.register Character do
   permit_params :name, :region, :rarity, :description, :character_id
-  before_action :find_character, only: [ :show ]
+  before_action :find_character, only: [ :show, :edit ]
 
   actions :all, except: [ :destroy, :update ]
   filter :rarity
@@ -35,6 +35,12 @@ ActiveAdmin.register Character do
       def show
         if @character.characterable_type == "PlayableCharacter"
           redirect_to admin_playable_character_path(id: @character.characterable_id)
+        end
+      end
+
+      def edit
+        if @character.characterable_type == "PlayableCharacter"
+          redirect_to edit_admin_playable_character_path(id: @character.characterable_id)
         end
       end
 
