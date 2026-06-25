@@ -1,0 +1,21 @@
+ pre-commit:
+   parallel: true
+   jobs:
+
+     - name: rubocop lint
+       glob: "*.rb"
+       exclude:
+         - config/application.rb
+         - config/routes.rb
+       run: bundle exec rubocop --force-exclusion -- {all_files}
+
+     - name: Scan for common Rails security vulnerabilities using static analysis
+       run:  bundle exec bin/brakeman --no-pager --force -- {all_files}
+
+     - name: Scan for known security vulnerabilities in gems used
+       run:  bundle exec rake bin/bundler-audit -- {all_files}
+
+     - name: test
+       glob: "*.rb"
+       run: bundle exec rake test -- {all_files}
+
