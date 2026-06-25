@@ -46,3 +46,6 @@ en:
       create:
         notice: "Character successfully created"
         record_invalid: "Character can't be created"
+      update:
+        success: "Character successfully updated!"
+        record_invalid: "Character can't be updated"
