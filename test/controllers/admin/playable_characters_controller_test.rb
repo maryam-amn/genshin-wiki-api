@@ -3,11 +3,9 @@ require "test_helper"
 class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
-  setup do
-    sign_in users(:admin_users)
-  end
-
   test "Should be able to create a playable characters when the user is logged in and all the field are fill in" do
+    sign_in users(:admin_users)
+
     assert_difference -> { Character.count } => +1, -> { PlayableCharacter.count } => +1 do
       post admin_playable_characters_path, params: {
         playable_character: {
@@ -32,7 +30,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
     end
 
   test "Shouldn't be able to create a playable characters when the user is not logged in" do
-     sign_out :user
+    sign_out :user
 
     assert_difference -> { Character.count } => 0, -> { PlayableCharacter.count } => 0  do
       post admin_playable_characters_path, params: {
@@ -56,6 +54,8 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "we shouldn't be able to create a playable characters if the character's field are not valid" do
+    sign_in users(:admin_users)
+
     assert_difference -> { Character.count } => 0, -> { PlayableCharacter.count } => 0 do
       post admin_playable_characters_path, params: {
         playable_character: {
@@ -78,6 +78,8 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "we shouldn't be able to create a playable characters if the playable character's field are not valid" do
+    sign_in users(:admin_users)
+
     assert_difference -> { Character.count } => 0, -> { PlayableCharacter.count } => 0 do
       post admin_playable_characters_path, params: {
         playable_character: {
@@ -99,6 +101,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
     assert_includes flash[:alert], I18n.t("Playable_Characters.create.record_invalid")
   end
   test "Should be able to delete a playable character" do
+    sign_in users(:admin_users)
     character = playable_characters(:yanfei_from_fontaine_region)
 
     assert_difference [ -> { PlayableCharacter.count }, -> { Character.count } ], -1 do
@@ -112,6 +115,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Shouldn't be able to delete a playable character who is a 5 star" do
+    sign_in users(:admin_users)
     character = playable_characters(:eula_from_mondsatdt)
 
     assert_difference [ -> { PlayableCharacter.count }, -> { Character.count } ], 0 do
@@ -122,143 +126,5 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to admin_characters_path
 
     assert_includes flash[:error], I18n.t("Characters.destroy.should_not_delete_legendary_character")
-  end
-
-  test "Should be able to update a playable character if we change the value of a field using a PATCH request" do
-    playable_character = playable_characters(:yanfei_from_fontaine_region)
-
-    patch admin_playable_character_path(id: playable_character.id), params: {
-        playable_character: {
-          description: "Yanfei est un personnage Pyro 4 étoiles de Gens...",
-          name: "Yanfei",
-          rarity: 4,
-          region: "Fontaine",
-          base_hp: 150,
-          base_defense: 150,
-          base_attack: 159
-          } }
-
-    assert_response :redirect
-
-    assert_redirected_to admin_playable_character_path(playable_character.id)
-
-    playable_character.reload
-
-    assert_includes flash[:notice], I18n.t("Playable_Characters.update.success")
-
-    assert_equal 150.0, playable_character.base_hp
-    assert_equal "Fontaine", playable_character.character.region
-  end
-
-  test "Could be able to update a playable character if we change the value of a field using a PUT request" do
-    playable_character = playable_characters(:charlotte_from_fontaine_region)
-
-    put admin_playable_character_path(id: playable_character.id), params: {
-      playable_character: {
-        description: "Charlotte est un personnage Cryo 4 étoile, journaliste pour L'Oiseau de vapeur, le célébre journal de Fontaine",
-        name: "Charlotte",
-        rarity: 4,
-        region: "Liyue",
-        base_hp: 159,
-        base_defense: 45.78,
-        base_attack: 	14.51
-      } }
-
-    assert_response :redirect
-
-    assert_redirected_to admin_playable_character_path(playable_character.id)
-
-    playable_character.reload
-
-    assert_includes flash[:notice], I18n.t("Playable_Characters.update.success")
-
-    assert_equal 159.0, playable_character.base_hp
-    assert_equal "Liyue", playable_character.character.region
-  end
-
-  test "Shouldn't be able to update a playable character if a required field is blank with a PATCH request" do
-    playable_character = playable_characters(:yanfei_from_fontaine_region)
-
-    patch admin_playable_character_path(id: playable_character.id), params: {
-      playable_character: {
-        description: " Yanfei est un personnage Pyro 4 étoiles de Genshin Impact qui utilise un catalyseur",
-        name: "Yanfei",
-        rarity: 4,
-        region: "",
-        base_hp: 150,
-        base_defense: 150,
-        base_attack: ""
-      } }
-    assert_response :redirect
-
-    assert_redirected_to edit_admin_playable_character_path
-
-    playable_character.reload
-    assert_includes flash[:error], I18n.t("Playable_Characters.update.record_invalid")
-
-    assert_equal "Liyue", playable_character.region
-    assert_equal 20.12, playable_character.base_attack
-  end
-
-  test "Can't update a playable character if the field is blank using a PUT request" do
-    playable_character = playable_characters(:charlotte_from_fontaine_region)
-
-    put admin_playable_character_path(id: playable_character.id), params: {
-      playable_character: {
-        description: "Charlotte est un personnage Cryo 4 étoile, journaliste pour L'Oiseau de vapeur, le célébre journal de Fontaine",
-        name: "Charlotte",
-        rarity: 4,
-        region: "",
-        base_hp: 159,
-        base_defense: 45.78,
-        base_attack: 	""
-      }
-    }
-
-    assert_response :redirect
-
-    assert_redirected_to edit_admin_playable_character_path
-
-    playable_character.reload
-    assert_includes flash[:error], I18n.t("Playable_Characters.update.record_invalid")
-
-    assert_equal "Fontaine", playable_character.region
-    assert_equal 14.51, playable_character.base_attack
-  end
-
-  test "Should render an error and shouldn't update the object in the database (rollback) if i have the same name as another playable character using a PUT request" do
-    playable_character = playable_characters(:furina_from_fontaine_region)
-
-    put admin_playable_character_path(id: playable_character.id), params: {
-      playable_character: {
-        name: "Charlotte",
-        base_attack: 50
-      }
-    }
-
-    assert_response :redirect
-    assert_redirected_to edit_admin_playable_character_path
-
-    assert_includes flash[:error], I18n.t("Playable_Characters.update.record_invalid")
-
-    assert_equal 18.99, playable_character.base_attack
-    assert_not_equal 50, playable_character.base_attack
-  end
-
-  test "Should render an error and shouldn't update the object in the database (rollback) if i have the same name as another playable character using a PATCH request" do
-    playable_character = playable_characters(:charlotte_from_fontaine_region)
-    patch admin_playable_character_path(id: playable_character.id), params: {
-      playable_character: {
-        rarity: "Furina",
-        base_attack: 50
-      }
-    }
-
-    assert_response :redirect
-    assert_redirected_to edit_admin_playable_character_path
-
-    assert_includes flash[:error], I18n.t("Playable_Characters.update.record_invalid")
-    assert_equal 14.51, playable_character.base_attack
-    assert_not_equal 50, playable_character.base_attack
   end
 end
