@@ -5,7 +5,7 @@ class PlayableCharacterJson
 
   def to_h
     {
-      playable_character_id: @playabe_characteral.id,
+      id: @playabe_characteral.id,
       character_id: @playabe_characteral.character.id,
       name: @playabe_characteral.name,
       description: @playabe_characteral.description,

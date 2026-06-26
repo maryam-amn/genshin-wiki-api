@@ -3,12 +3,12 @@
 require "test_helper"
 
 class PlayableCharacterJsonTest < ActiveSupport::TestCase
-  test "Should get all playable character json" do
+  test "Should get a playable character serialized in JSON" do
     playable_character = playable_characters(:charlotte_from_fontaine_region)
 
     expected_json =
       {
-        playable_character_id: 944569428,
+        id: 944569428,
         character_id: 944569428,
         name: "Charlotte",
         description: "Charlotte est un personnage Cryo 4 étoile, journaliste pour L'Oiseau de vapeur, le célébre journal de Fontaine",
