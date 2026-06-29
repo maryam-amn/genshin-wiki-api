@@ -9,7 +9,8 @@ class CharacterJson
       name: @character.name,
       description: @character.description,
       rarity: @character.rarity,
-      region: @character.region
+      region: @character.region,
+      character_type:  @character.characterable_type
     }
   end
 end

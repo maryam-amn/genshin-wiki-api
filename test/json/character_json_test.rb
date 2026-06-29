@@ -12,7 +12,8 @@ class CharacterJsonTest < ActiveSupport::TestCase
         name: "Yanfei",
         description: "Yanfei est un personnage Pyro 4 étoiles de Genshin Impact qui utilise un catalyseur",
         rarity: 4,
-        region: "Liyue"
+        region: "Liyue",
+        character_type: "PlayableCharacter"
       }
 
     character_to_json = CharacterJson.new(character:).to_h
