@@ -8,6 +8,6 @@ class Api::V1::PlayableCharactersController < ApiController
       returns code: 200
       def index
         characters_json = PlayableCharacter.all.map { |playable_character| PlayableCharacterJson.new(playable_character:).to_h }
-        render json: { playable_character: characters_json }
+        render json: { playable_characters: characters_json }
       end
 end

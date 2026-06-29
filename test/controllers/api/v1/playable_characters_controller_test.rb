@@ -12,7 +12,7 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
     playable_character = playable_characters(:yanfei_from_fontaine_region)
     playable_characters_to_json = PlayableCharacterJson.new(playable_character:).to_h
 
-    assert_includes response.parsed_body["playable_character"], playable_characters_to_json.as_json
-    assert_equal PlayableCharacter.count,  response.parsed_body["playable_character"].count
+    assert_includes response.parsed_body["playable_characters"], playable_characters_to_json.as_json
+    assert_equal PlayableCharacter.count,  response.parsed_body["playable_characters"].count
   end
 end
