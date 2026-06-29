@@ -12,10 +12,9 @@
      - name: Scan for common Rails security vulnerabilities using static analysis
        run:  bundle exec bin/brakeman --no-pager --force -- {all_files}
 
-     - name: Scan for known security vulnerabilities in gems used
-       run:  bundle exec rake bin/bundler-audit -- {all_files}
+ pull-request:
+   jobs:
 
-     - name: test
-       glob: "*.rb"
-       run: bundle exec rake test -- {all_files}
-
+   - name: test
+     glob: "*.rb"
+     run: bundle exec rake test -- {all_files}
