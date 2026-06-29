@@ -7,7 +7,7 @@
        exclude:
          - config/application.rb
          - config/routes.rb
-       run: bundle exec rubocop --force-exclusion -- {all_files}
+       run: bundle exec rubocop --force-exclusion -- {staged_files}
 
      - name: Scan for common Rails security vulnerabilities using static analysis
        run:  bundle exec bin/brakeman --no-pager --force -- {all_files}
