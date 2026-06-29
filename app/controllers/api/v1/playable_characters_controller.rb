@@ -14,7 +14,7 @@ class Api::V1::PlayableCharactersController < ApiController
         render json: { playable_character: characters_json }
       end
 
-      api :GET, "/api/v1/playable_characters/:id", "list of a playable characters"
+      api :GET, "/api/v1/playable_characters/:id", "render a playable characters"
       api_version "v1"
       returns code: 200
       error :not_found, I18n.t("Playable_Characters.errors.record_not_found")
