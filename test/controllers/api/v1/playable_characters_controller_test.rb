@@ -126,4 +126,39 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
     assert_not_equal  PlayableCharacter.last&.rarity.to_f, 3
     assert_not_equal  PlayableCharacter.last&.base_hp.to_f, 50
   end
+
+  test "Should delete a playablec character with a existing ID " do
+    playable_character = playable_characters(:yanfei_from_fontaine_region)
+
+    assert_difference [ -> { PlayableCharacter.count }, -> { Character.count } ], -1 do
+      delete api_v1_playable_character_url(id: playable_character.id)
+    end
+
+    assert_response :ok
+
+    assert_equal response.parsed_body[:message], I18n.t("Playable_Characters.destroy.notice")
+  end
+
+  test "Shouldn't be able to delete a playable character who doesn't exist in the database" do
+    assert_difference [ -> { PlayableCharacter.count }, -> { Character.count } ], 0 do
+      delete api_v1_playable_character_url(id: 0)
+    end
+
+   assert_response :not_found
+
+    assert_equal response.parsed_body[:error], I18n.t("Playable_Characters.errors.record_not_found").as_json
+  end
+
+
+  test "Shouldn't delete a playable character who is a legendary one" do
+    playable_characters = playable_characters(:eula_from_mondsatdt)
+
+    assert_difference [ -> { PlayableCharacter.count }, -> { Character.count } ], 0 do
+      delete api_v1_playable_character_url(id: playable_characters.id)
+    end
+
+    assert_response :unprocessable_entity
+
+    assert_includes response.parsed_body[:details][:field], I18n.t("Characters.destroy.should_not_delete_legendary_character").as_json
+  end
 end
