@@ -26,7 +26,7 @@ class Api::V1::PlayableCharactersController < ApiController
       api :POST, "/playable_characters", "create a playable character"
       api_version "v1"
       returns code: 201
-      error :unprocessable_content, I18n.t("Playable_Characters.errors.unprocessable_content")
+      error :unprocessable_content, "a required field is missing/blank or the character's name isn't unique so the playable character can't be created"
 
       def create
         ActiveRecord::Base.transaction do
