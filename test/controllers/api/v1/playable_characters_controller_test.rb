@@ -161,4 +161,156 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
 
     assert_includes response.parsed_body[:details][:field], I18n.t("Characters.destroy.should_not_delete_legendary_character").as_json
   end
+
+  test "Should be able to update a playable character using a PATCH request" do
+    playable_character = playable_characters(:yanfei_from_fontaine_region)
+
+      patch api_v1_playable_character_url(id: playable_character.id), params: {
+        "rarity": 5,
+        "region": "Fontaine",
+        "base_defense": 58,
+        "base_attack": 230
+      }
+
+    assert_response :ok
+
+    playable_character.reload
+
+    playable_characters_to_json = PlayableCharacterJson.new(playable_character:).to_h
+
+    assert_equal response.parsed_body, playable_characters_to_json.as_json
+  end
+
+  test "Should be able to update a playable character using a PUT request" do
+    playable_character = playable_characters(:yanfei_from_fontaine_region)
+
+    put api_v1_playable_character_url(id: playable_character.id), params: {
+      name: "Yanfei",
+      description: "Yanfei est un personnage Pyro 4 étoiles de Genshin Impact qui utilise un catalyseur",
+      rarity: 1,
+      region: "Liyue",
+      base_hp: 784.14,
+      base_defense: 49.12,
+      base_attack: 20.12,
+      is_limited: true
+    }
+
+    assert_response :ok
+
+    playable_character.reload
+
+    playable_characters_to_json = PlayableCharacterJson.new(playable_character:).to_h
+
+    assert_equal response.parsed_body, playable_characters_to_json.as_json
+  end
+
+  test "Shouldn't be able to update a playable character when a character's field is missing using a PATCH request" do
+    playable_character = playable_characters(:furina_from_fontaine_region)
+
+    patch api_v1_playable_character_url(id: playable_character.id), params: { region: "Montstadt", rarity: "" }
+
+    assert_response :unprocessable_entity
+
+    error_message = I18n.t("Playable_Characters.update.record_invalid")
+
+    assert_includes response.parsed_body[:error], error_message.as_json
+
+    assert_not_equal playable_character.region, "Montstadt"
+  end
+
+  test "Shouldn't be able to update a playable character when a character's field is missing using a PUT request" do
+    playable_character = playable_characters(:furina_from_fontaine_region)
+
+    put api_v1_playable_character_url(id: playable_character.id),
+         params: { name: "Furina",
+                   description: "Furina est un personnage Hydro  5 étoile. Elle est l'apparence mortelle actuelle de Foçalors, l'Archon Hydro actuel de Fontaine.",
+                   rarity: "",
+                   region: "Montstadt",
+                   base_hp: 1191.65,
+                   base_defense: 54.15,
+                   base_attack: 18.99,
+                   is_limited: true
+         }
+
+    assert_response :unprocessable_entity
+
+    error_message = I18n.t("Playable_Characters.update.record_invalid")
+
+    assert_includes response.parsed_body[:error], error_message.as_json
+
+    assert_not_equal playable_character.region, "Montstadt"
+  end
+
+  test "Shouldn't be able to update a character when a character's and playable character's required field are missing using a PATCH request" do
+    playable_character = playable_characters(:yanfei_from_fontaine_region)
+
+    patch api_v1_playable_character_url(id: playable_character.id), params: { region: "", base_hp: "", ie_limited: false }
+    assert_response :unprocessable_entity
+
+    error_message = I18n.t("Playable_Characters.update.record_invalid")
+
+    assert_equal response.parsed_body[:error], error_message.as_json
+
+    assert_equal playable_character.is_limited, true
+  end
+
+  test "Shouldn't be able to update a character when a character's and playable character's required field are missing using a PUT request" do
+    playable_character = playable_characters(:yanfei_from_fontaine_region)
+
+    put api_v1_playable_character_url(id: playable_character.id),
+        params: {  name: "Yanfei",
+                   description: "Yanfei est un personnage Pyro 4 étoiles de Genshin Impact qui utilise un catalyseur",
+                   rarity: "",
+                   region: "Liyue",
+                   base_hp: "",
+                   base_defense: 49.12,
+                   base_attack: 20.12,
+                   is_limited: false
+        }
+    assert_response :unprocessable_entity
+
+    error_message = I18n.t("Playable_Characters.update.record_invalid")
+
+    assert_equal response.parsed_body[:error], error_message.as_json
+
+    assert_equal playable_character.is_limited, true
+  end
+
+  test "Shouldn't be able to update a playable character's name with the same as another character using the PATCH request" do
+    playable_character = playable_characters(:charlotte_from_fontaine_region)
+
+    patch api_v1_playable_character_url(id: playable_character.id), params: { name: "Furina" }
+
+    assert_response :unprocessable_entity
+
+    error_message = I18n.t("Playable_Characters.update.record_invalid")
+
+    assert_equal response.parsed_body[:error], error_message.as_json
+
+    assert_not_equal playable_character.name, "Furina"
+  end
+
+  test "Shouldn't be able to update a playable character's name with the same as another character using the PUT request" do
+    playable_character = playable_characters(:charlotte_from_fontaine_region)
+
+    put api_v1_playable_character_url(id: playable_character.id),
+        params: {
+          name: "Furina",
+          description: "Charlotte est un personnage Cryo 4 étoile, journaliste pour L'Oiseau de vapeur, le célébre journal de Fontaine",
+          rarity: 4,
+          region: "Fontaine",
+          base_hp: 902.67,
+          base_defense: 45.78,
+          base_attack: 14.51,
+          is_limited: true
+        }
+
+    assert_response :unprocessable_entity
+
+    error_message = I18n.t("Playable_Characters.update.record_invalid")
+
+    assert_equal response.parsed_body[:error], error_message.as_json
+
+    assert_not_equal playable_character.name, "Furina"
+  end
 end
