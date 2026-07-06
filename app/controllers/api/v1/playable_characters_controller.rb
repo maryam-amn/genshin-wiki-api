@@ -3,7 +3,7 @@ class Api::V1::PlayableCharactersController < ApiController
         formats [ "json" ]
       end
 
-      before_action :find_playable_character, only: [ :show ]
+      before_action :find_playable_character, only: [ :show, :destroy ]
 
       api :GET, "/api/v1/playable_characters", "list of all playable characters"
       api_version "v1"
@@ -36,6 +36,22 @@ class Api::V1::PlayableCharactersController < ApiController
         render json: PlayableCharacterJson.new(playable_character: @playable_character).to_h, status: :created
       rescue ActiveRecord::RecordInvalid => e
         render status: :unprocessable_entity, json: { error: I18n.t("Playable_Characters.create.record_invalid"), details: { field: [ e.message ] } }
+      end
+
+
+      api :DELETE, "/playable_characters/:id", "delete a playable character"
+      api_version "v1"
+      returns code: 200
+      error :unprocessable_content, "can't destroy a playable character who's a legendary one"
+      error :not_found, I18n.t("Playable_Characters.errors.record_not_found")
+
+      def destroy
+        ActiveRecord::Base.transaction do
+          @playable_character.character.destroy!
+        end
+        render json: { message: I18n.t("Playable_Characters.destroy.notice") }, status: :ok
+      rescue ActiveRecord::RecordNotDestroyed => e
+        render status: :unprocessable_entity, json: { error: I18n.t("Playable_Characters.errors.record_not_destroyed"), details: { field: [ @playable_character.character.errors[:base].to_a.join(" "), e.message ] } }
       end
 
       def find_playable_character
