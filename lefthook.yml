@@ -1,0 +1,10 @@
+ pre-commit:
+   parallel: true
+   jobs:
+
+     - name: rubocop lint
+       glob: "*.rb"
+       exclude:
+         - config/application.rb
+         - config/routes.rb
+       run: bundle exec rubocop --force-exclusion -- {staged_files}

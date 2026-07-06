@@ -46,7 +46,7 @@ gem "sprockets-rails"
 gem "sass-rails"
 
 # will generate the documentation for the API
-gem "apipie-rails", "~> 1.3"
+gem "apipie-rails", "~> 1.5"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -60,4 +60,6 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  gem "lefthook", require: false
 end
