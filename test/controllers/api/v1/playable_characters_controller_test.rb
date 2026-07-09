@@ -333,6 +333,8 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
     expected_error = { error: I18n.t("Playable_Characters.update.record_invalid"), details: { field: [ I18n.t("Playable_Characters.update.no_field_has_been_changed") ] } }
 
     assert_equal expected_error.as_json, response.parsed_body
+
+    assert_equal playable_character.name, "Charlotte"
   end
 
   test "Shouldn't be able to update a playable character's data if no field have been changed using the PUT request" do
@@ -349,5 +351,7 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
     expected_error = { error: I18n.t("Playable_Characters.update.record_invalid"), details: { field: [ I18n.t("Playable_Characters.update.no_field_has_been_changed") ] } }
 
     assert_equal expected_error.as_json, response.parsed_body
+
+    assert_equal playable_character.name, "Furina"
   end
 end

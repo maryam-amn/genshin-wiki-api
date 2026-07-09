@@ -66,8 +66,8 @@ class Api::V1::PlayableCharactersController < ApiController
         @playable_character.character.assign_attributes(character_params)
         if @playable_character.changed? || @playable_character.character.changed?
           ActiveRecord::Base.transaction do
-            @playable_character.update!(playable_character_params)
-            @playable_character.character.update!(character_params)
+            @playable_character.save!
+            @playable_character.character.save!
           end
           render json: PlayableCharacterJson.new(playable_character: @playable_character).to_h, status: :ok
         else
@@ -84,10 +84,10 @@ class Api::V1::PlayableCharactersController < ApiController
         render status: :not_found, json: { error:  I18n.t("Playable_Characters.errors.record_not_found"), details: { field: [ e ] } }
       end
 
-  def playable_character_params
-    params.permit([ :base_hp, :base_defense, :base_attack, :is_limited ])
-  end
-  def character_params
-    params.permit([ :name, :description, :rarity, :region  ])
-  end
+      def playable_character_params
+        params.permit([ :base_hp, :base_defense, :base_attack, :is_limited ])
+      end
+      def character_params
+        params.permit([ :name, :description, :rarity, :region  ])
+      end
 end
