@@ -241,10 +241,10 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
     assert_not_equal playable_character.region, "Montstadt"
   end
 
-  test "Shouldn't be able to update a character when a character's and playable character's required field are missing using a PATCH request" do
+  test "Shouldn't be able to update a layable character when a playable character's required field is missing using a PATCH request" do
     playable_character = playable_characters(:yanfei_from_fontaine_region)
 
-    patch api_v1_playable_character_url(id: playable_character.id), params: { region: "", base_hp: "", ie_limited: false }
+    patch api_v1_playable_character_url(id: playable_character.id), params: { base_hp: "", ie_limited: false }
     assert_response :unprocessable_entity
 
     error_message = I18n.t("Playable_Characters.update.record_invalid")
@@ -254,13 +254,13 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
     assert_equal playable_character.is_limited, true
   end
 
-  test "Shouldn't be able to update a character when a character's and playable character's required field are missing using a PUT request" do
+  test "Shouldn't be able to update a character when a playable character's field is missing using a PUT request" do
     playable_character = playable_characters(:yanfei_from_fontaine_region)
 
     put api_v1_playable_character_url(id: playable_character.id),
         params: {  name: "Yanfei",
                    description: "Yanfei est un personnage Pyro 4 étoiles de Genshin Impact qui utilise un catalyseur",
-                   rarity: "",
+                   rarity: 4,
                    region: "Liyue",
                    base_hp: "",
                    base_defense: 49.12,
