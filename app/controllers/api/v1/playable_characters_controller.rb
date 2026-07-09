@@ -62,12 +62,19 @@ class Api::V1::PlayableCharactersController < ApiController
       error :not_found, I18n.t("Playable_Characters.errors.record_not_found")
 
       def update
-        ActiveRecord::Base.transaction do
-          @playable_character.update!(params.permit([ :base_hp, :base_defense, :base_attack, :is_limited ]))
-          @playable_character.character.update!(params.permit([ :name, :description, :rarity, :region  ]))
+        @playable_character.assign_attributes(playable_character_params)
+        @playable_character.character.assign_attributes(character_params)
+        if @playable_character.changed? || @playable_character.character.changed?
+          ActiveRecord::Base.transaction do
+            @playable_character.update!(playable_character_params)
+            @playable_character.character.update!(character_params)
+          end
+          render json: PlayableCharacterJson.new(playable_character: @playable_character).to_h, status: :ok
+        else
+          render json: { error: I18n.t("Playable_Characters.update.record_invalid"),
+                         details: { field: [ I18n.t("Playable_Characters.update.no_field_has_been_changed") ] } }, status: :unprocessable_entity
         end
-        render json: PlayableCharacterJson.new(playable_character: @playable_character).to_h, status: :ok
-      rescue ActiveRecord::RecordInvalid => e
+      rescue ActiveRecord::RecordInvalid=> e
         render status: :unprocessable_entity, json: { error: I18n.t("Playable_Characters.update.record_invalid"), details: { field: [ e.message ] } }
       end
 
@@ -76,4 +83,11 @@ class Api::V1::PlayableCharactersController < ApiController
       rescue ActiveRecord::RecordNotFound => e
         render status: :not_found, json: { error:  I18n.t("Playable_Characters.errors.record_not_found"), details: { field: [ e ] } }
       end
+
+  def playable_character_params
+    params.permit([ :base_hp, :base_defense, :base_attack, :is_limited ])
+  end
+  def character_params
+    params.permit([ :name, :description, :rarity, :region  ])
+  end
 end
