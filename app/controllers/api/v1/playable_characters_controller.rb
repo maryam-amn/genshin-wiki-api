@@ -69,11 +69,8 @@ class Api::V1::PlayableCharactersController < ApiController
             @playable_character.save!
             @playable_character.character.save!
           end
-          render json: PlayableCharacterJson.new(playable_character: @playable_character).to_h, status: :ok
-        else
-          render json: { error: I18n.t("Playable_Characters.update.record_invalid"),
-                         details: { field: [ I18n.t("Playable_Characters.update.no_field_has_been_changed") ] } }, status: :unprocessable_entity
         end
+        render json: PlayableCharacterJson.new(playable_character: @playable_character).to_h, status: :ok
       rescue ActiveRecord::RecordInvalid=> e
         render status: :unprocessable_entity, json: { error: I18n.t("Playable_Characters.update.record_invalid"), details: { field: [ e.message ] } }
       end

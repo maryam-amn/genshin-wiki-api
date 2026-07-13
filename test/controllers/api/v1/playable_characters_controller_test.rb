@@ -178,6 +178,9 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
 
     playable_characters_to_json = PlayableCharacterJson.new(playable_character:).to_h
 
+    assert_equal 5, playable_character.rarity
+    assert_equal 58, playable_character.base_defense
+
     assert_equal response.parsed_body, playable_characters_to_json.as_json
   end
 
@@ -200,6 +203,9 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
     playable_character.reload
 
     playable_characters_to_json = PlayableCharacterJson.new(playable_character:).to_h
+
+    assert_equal 1, playable_character.rarity
+    assert_equal 49.12, playable_character.base_defense
 
     assert_equal response.parsed_body, playable_characters_to_json.as_json
   end
@@ -241,7 +247,7 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
     assert_not_equal playable_character.region, "Montstadt"
   end
 
-  test "Shouldn't be able to update a layable character when a playable character's required field is missing using a PATCH request" do
+  test "Shouldn't be able to update a playable character when a playable character's required field is missing using a PATCH request" do
     playable_character = playable_characters(:yanfei_from_fontaine_region)
 
     patch api_v1_playable_character_url(id: playable_character.id), params: { base_hp: "", ie_limited: false }
@@ -314,7 +320,7 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
     assert_not_equal playable_character.name, "Furina"
   end
 
-  test "Shouldn't be able to update a playable character's data if no field have been changed using the PATCH request" do
+  test "Shouldn't do the update action when a playable character's data haven't been changed using the PATCH request" do
     playable_character = playable_characters(:charlotte_from_fontaine_region)
 
     patch api_v1_playable_character_url(id: playable_character.id), params: {
@@ -328,16 +334,13 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
       is_limited: true
     }
 
-    assert_response :unprocessable_entity
+    assert_response :ok
 
-    expected_error = { error: I18n.t("Playable_Characters.update.record_invalid"), details: { field: [ I18n.t("Playable_Characters.update.no_field_has_been_changed") ] } }
-
-    assert_equal expected_error.as_json, response.parsed_body
-
+    assert_not_equal Time.zone.now, playable_character.updated_at
     assert_equal playable_character.name, "Charlotte"
   end
 
-  test "Shouldn't be able to update a playable character's data if no field have been changed using the PUT request" do
+  test "Shouldn't do the update action when a playable character's data haven't been changed using the PUT request" do
     playable_character = playable_characters(:furina_from_fontaine_region)
 
     put api_v1_playable_character_url(id: playable_character.id), params: {
@@ -346,12 +349,9 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
       base_hp: 1191.65
     }
 
-    assert_response :unprocessable_entity
+    assert_response :ok
 
-    expected_error = { error: I18n.t("Playable_Characters.update.record_invalid"), details: { field: [ I18n.t("Playable_Characters.update.no_field_has_been_changed") ] } }
-
-    assert_equal expected_error.as_json, response.parsed_body
-
+    assert_not_equal Time.zone.now, playable_character.updated_at
     assert_equal playable_character.name, "Furina"
   end
 end
