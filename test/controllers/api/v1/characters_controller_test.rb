@@ -187,4 +187,58 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
 
     assert_includes response.parsed_body[:message], error_message.as_json
   end
+
+  test "Should be able to filter by region and render all character from that region" do
+    get api_v1_characters_url(region: "Fontaine")
+
+    assert_response :success
+    assert_equal response.parsed_body[:characters].count, Character.where(region: "Fontaine").count
+
+    assert_equal response.parsed_body[:characters].first[:region], Character.find_by(region: "Fontaine").region
+
+    assert_equal response.parsed_body[:characters].first[:description], Character.find_by(region: "Fontaine").description
+  end
+
+  test "Should be able to filter by rarity and render all character from that rarity"  do
+    get api_v1_characters_url(rarity: 4)
+
+    assert_response :success
+    assert_equal response.parsed_body[:characters].count, Character.where(rarity: 4).count
+
+    assert_equal response.parsed_body[:characters].first[:rarity], Character.find_by(region: "Fontaine").rarity
+    assert_equal response.parsed_body[:characters].first[:description], Character.find_by(region: "Fontaine").description
+  end
+
+  test "Should be able to filter by type of character and render all character from that type"  do
+    get api_v1_characters_url(characterable_type: "PlayableCharacter")
+
+    assert_response :success
+    assert_equal response.parsed_body[:characters].count, Character.where(characterable_type: "PlayableCharacter").count
+
+    assert_equal response.parsed_body[:characters].first[:character_type], Character.find_by(region: "Fontaine").characterable_type
+    assert_equal response.parsed_body[:characters].first[:description], Character.find_by(region: "Fontaine").description
+  end
+
+  test "Should return an error message if no character is found using a filter" do
+    get api_v1_characters_url(rarity: 7)
+
+    assert_response :not_found
+
+    error_message = "#{I18n.t("Characters.filter.no_characters_found")}"
+
+    assert_equal response.parsed_body[:message], error_message
+  end
+
+  test "Should render an message when the the spelling of the search query is incorrect" do
+    get api_v1_characters_url(region: "Fontain")
+
+    assert_response :bad_request
+
+    details_message = "invalid input value for enum regions"
+
+    assert_includes response.parsed_body[:details][:field], details_message
+
+    error_message = "#{I18n.t("Characters.filter.no_characters_found")}, #{I18n.t("Characters.filter.check_spelling")}"
+    assert_equal response.parsed_body[:error], error_message
+  end
 end

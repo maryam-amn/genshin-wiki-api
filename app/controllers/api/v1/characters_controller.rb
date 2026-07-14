@@ -6,16 +6,35 @@ class Api::V1::CharactersController < ApiController
       api :GET, "/characters", "list of all characters"
       api_version "v1"
       returns code: 200
+
+      param :region, [ "Liyue", "Fontaine", "Montstadt" ], desc: "Filter to show all characters from a region"
+      param :rarity, :number, between: [ 1...5 ], desc: "Filter to show all characters of a rarity"
+      param :characterable_type, [ "PlayableCharacter" ], desc: "Filter to get all character by type of character"
+
       def index
-        characters_json = Character.all.map { |character| CharacterJson.new(character:).to_h }
-        render json: { characters: characters_json }
+        characters = Character.all
+
+        if permited_params_to_filter
+          characters = characters.by_region(params[:region]) if params[:region]
+          characters = characters.by_rarity(params[:rarity]) if params[:rarity]
+          characters = characters.by_character_type(params[:characterable_type]) if params[:characterable_type]
+        end
+
+        if characters.blank?
+          render json: { message: "#{I18n.t("Characters.filter.no_characters_found")}" }, status: :not_found
+        else
+          characters_json = characters.map { |character| CharacterJson.new(character:).to_h }
+          render json: { characters: characters_json }, status: :ok
+        end
+
+      rescue ActiveRecord::StatementInvalid => e
+        render json: { error: "#{I18n.t("Characters.filter.no_characters_found")}, #{I18n.t("Characters.filter.check_spelling")}", details: { field:  e.message  } }, status: :bad_request
       end
 
       api :GET, "/characters/:id", "render a character"
       api_version "v1"
       returns code: 200
       error :not_found, "character not found"
-
       def show
         begin
           character = Character.find(params[:id])
@@ -75,5 +94,8 @@ class Api::V1::CharactersController < ApiController
         end
       rescue ActiveRecord::RecordNotFound
         render status: :not_found, json: { message: "Character not found" }
+      end
+      def permited_params_to_filter
+        params.permit(:region).present? || params.permit(:rarity).present? || params.permit(:characterable_type).present?
       end
 end

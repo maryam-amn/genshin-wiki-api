@@ -11,6 +11,10 @@ class Character < ApplicationRecord
   enum :region, %w[ Liyue Fontaine Montstadt ].index_by(&:itself)
   before_destroy :check_legendary_character
 
+  scope :by_region, ->(region) { where(region: region) }
+  scope :by_character_type, ->(character) { where(characterable_type: character) }
+  scope :by_rarity, ->(rarity) { where(rarity: rarity) }
+
   def self.ransackable_associations(_auth_object = nil)
     %w[rarity region characterable_type characterable_id]
   end
