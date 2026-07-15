@@ -42,19 +42,4 @@ class CharacterTest < ActiveSupport::TestCase
     character = Character.new(name: "Cyno", description: "Cyno est un personnage Électro.", rarity: "top")
     assert_not character.valid?
   end
-
-  test "Should be able to filter characters by rarity" do
-    character_by_rarity = Character.all.by_rarity(4)
-    assert_equal Character.where(rarity: 4).count, character_by_rarity.count
-  end
-
-  test "Should be able to filter characters by region" do
-    character_by_region = Character.all.by_region("Fontaine")
-    assert_equal Character.where(region: "Fontaine").count, character_by_region.count
-  end
-
-  test "Should be able to filter characters by type" do
-    characters_by_type= Character.all.by_character_type("PlayableCharacter")
-    assert_equal Character.where(characterable_type: "PlayableCharacter").count, characters_by_type.count
-  end
 end

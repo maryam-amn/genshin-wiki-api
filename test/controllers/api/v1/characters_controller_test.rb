@@ -219,6 +219,18 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
     assert_equal response.parsed_body[:characters].first[:description], Character.find_by(region: "Fontaine").description
   end
 
+  test "Should be able to filter using two different filters and return all matching objects"  do
+    get api_v1_characters_url(rarity: 4, region: "Fontaine")
+
+    assert_response :success
+    characters = Character.where(rarity: 4).and(Character.where(region: "Fontaine"))
+
+    assert_equal response.parsed_body[:characters].count, characters.count
+
+    assert_equal response.parsed_body[:characters].first[:name], characters.first.name
+  end
+
+
   test "Should return an error message if no character is found using a filter" do
     get api_v1_characters_url(rarity: 7)
 
@@ -232,13 +244,10 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
   test "Should render an message when the the spelling of the search query is incorrect" do
     get api_v1_characters_url(region: "Fontain")
 
-    assert_response :bad_request
+    assert_response :unprocessable_entity
 
-    details_message = "invalid input value for enum regions"
+    details_message = "Invalid parameter 'region'"
 
-    assert_includes response.parsed_body[:details][:field], details_message
-
-    error_message = "#{I18n.t("Characters.filter.no_characters_found")}, #{I18n.t("Characters.filter.check_spelling")}"
-    assert_equal response.parsed_body[:error], error_message
+    assert_includes response.parsed_body[:error], details_message
   end
 end

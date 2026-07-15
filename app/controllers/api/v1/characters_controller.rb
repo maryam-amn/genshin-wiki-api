@@ -12,13 +12,8 @@ class Api::V1::CharactersController < ApiController
       param :characterable_type, [ "PlayableCharacter" ], desc: "Filter to get all character by type of character"
 
       def index
-        characters = Character.all
-
-        if permited_params_to_filter
-          characters = characters.by_region(params[:region]) if params[:region]
-          characters = characters.by_rarity(params[:rarity]) if params[:rarity]
-          characters = characters.by_character_type(params[:characterable_type]) if params[:characterable_type]
-        end
+        conditions = permited_params_to_filter.slice(:region, :rarity, :characterable_type).to_h.compact
+        characters = Character.where(conditions)
 
         if characters.blank?
           render json: { message: "#{I18n.t("Characters.filter.no_characters_found")}" }, status: :not_found
@@ -26,10 +21,7 @@ class Api::V1::CharactersController < ApiController
           characters_json = characters.map { |character| CharacterJson.new(character:).to_h }
           render json: { characters: characters_json }, status: :ok
         end
-
-      rescue ActiveRecord::StatementInvalid => e
-        render json: { error: "#{I18n.t("Characters.filter.no_characters_found")}, #{I18n.t("Characters.filter.check_spelling")}", details: { field:  e.message  } }, status: :bad_request
-      end
+   end
 
       api :GET, "/characters/:id", "render a character"
       api_version "v1"
@@ -96,6 +88,6 @@ class Api::V1::CharactersController < ApiController
         render status: :not_found, json: { message: "Character not found" }
       end
       def permited_params_to_filter
-        params.permit(:region).present? || params.permit(:rarity).present? || params.permit(:characterable_type).present?
+        params.permit(:region, :rarity, :characterable_type)
       end
 end
