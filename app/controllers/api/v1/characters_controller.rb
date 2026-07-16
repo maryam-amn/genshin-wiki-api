@@ -15,12 +15,9 @@ class Api::V1::CharactersController < ApiController
         conditions = permited_params_to_filter.slice(:region, :rarity, :characterable_type).to_h.compact
         characters = Character.where(conditions)
 
-        if characters.blank?
-          render json: { message: "#{I18n.t("Characters.filter.no_characters_found")}" }, status: :not_found
-        else
+
           characters_json = characters.map { |character| CharacterJson.new(character:).to_h }
           render json: { characters: characters_json }, status: :ok
-        end
    end
 
       api :GET, "/characters/:id", "render a character"

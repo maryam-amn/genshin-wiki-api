@@ -41,7 +41,6 @@ en:
         choose_region: "choose a region from the list, can't be blank"
       filter:
         no_characters_found: "No characters were found using this filter"
-        check_spelling: "please check the spelling of your search query"
   Playable_Characters:
       new: "Add a new  playable character"
       destroy:

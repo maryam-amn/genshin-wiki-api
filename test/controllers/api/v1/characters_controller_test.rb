@@ -192,31 +192,32 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
     get api_v1_characters_url(region: "Fontaine")
 
     assert_response :success
-    assert_equal response.parsed_body[:characters].count, Character.where(region: "Fontaine").count
+     all_characters_from_fontaine = Character.where(region: "Fontaine").map { |character| CharacterJson.new(character:).to_h }
 
-    assert_equal response.parsed_body[:characters].first[:region], Character.find_by(region: "Fontaine").region
-
-    assert_equal response.parsed_body[:characters].first[:description], Character.find_by(region: "Fontaine").description
+    assert_equal [ "Fontaine" ], response.parsed_body[:characters].map { |character| character[:region] }.uniq
+    assert_equal response.parsed_body[:characters].count, all_characters_from_fontaine.count
+    assert_equal response.parsed_body[:characters], all_characters_from_fontaine.as_json
   end
 
   test "Should be able to filter by rarity and render all character from that rarity"  do
     get api_v1_characters_url(rarity: 4)
 
     assert_response :success
-    assert_equal response.parsed_body[:characters].count, Character.where(rarity: 4).count
+    all_characters_with_4_rarity = Character.where(rarity: 4).map { |character| CharacterJson.new(character:).to_h }
 
-    assert_equal response.parsed_body[:characters].first[:rarity], Character.find_by(region: "Fontaine").rarity
-    assert_equal response.parsed_body[:characters].first[:description], Character.find_by(region: "Fontaine").description
+    assert_equal response.parsed_body[:characters].count, all_characters_with_4_rarity.count
+
+    assert_equal [ 4 ], response.parsed_body[:characters].map { |character| character[:rarity] }.uniq
   end
 
   test "Should be able to filter by type of character and render all character from that type"  do
     get api_v1_characters_url(characterable_type: "PlayableCharacter")
 
     assert_response :success
-    assert_equal response.parsed_body[:characters].count, Character.where(characterable_type: "PlayableCharacter").count
+    all_characters_with_type_playable =  Character.where(characterable_type: "PlayableCharacter").map { |character| CharacterJson.new(character:).to_h }
+    assert_equal response.parsed_body[:characters].count, all_characters_with_type_playable.count
 
-    assert_equal response.parsed_body[:characters].first[:character_type], Character.find_by(region: "Fontaine").characterable_type
-    assert_equal response.parsed_body[:characters].first[:description], Character.find_by(region: "Fontaine").description
+    assert_equal [ "PlayableCharacter" ], response.parsed_body[:characters].map { |character| character[:character_type] }.uniq
   end
 
   test "Should be able to filter using two different filters and return all matching objects"  do
@@ -225,20 +226,21 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     characters = Character.where(rarity: 4).and(Character.where(region: "Fontaine"))
 
-    assert_equal response.parsed_body[:characters].count, characters.count
+    assert_equal [ 4 ], response.parsed_body[:characters].map { |character| character[:rarity] }.uniq
+    assert_equal [ "Fontaine" ], response.parsed_body[:characters].map { |character| character[:region] }.uniq
 
-    assert_equal response.parsed_body[:characters].first[:name], characters.first.name
+    assert_equal response.parsed_body[:characters].count, characters.count
   end
 
 
   test "Should return an error message if no character is found using a filter" do
     get api_v1_characters_url(rarity: 7)
 
-    assert_response :not_found
+    assert_response :ok
 
-    error_message = "#{I18n.t("Characters.filter.no_characters_found")}"
+    expected_result = []
 
-    assert_equal response.parsed_body[:message], error_message
+    assert_equal expected_result, response.parsed_body[:characters]
   end
 
   test "Should render an message when the the spelling of the search query is incorrect" do
