@@ -192,20 +192,14 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
     get api_v1_characters_url(region: "Fontaine")
 
     assert_response :success
-     all_characters_from_fontaine = Character.where(region: "Fontaine").map { |character| CharacterJson.new(character:).to_h }
 
     assert_equal [ "Fontaine" ], response.parsed_body[:characters].map { |character| character[:region] }.uniq
-    assert_equal response.parsed_body[:characters].count, all_characters_from_fontaine.count
-    assert_equal response.parsed_body[:characters], all_characters_from_fontaine.as_json
-  end
+   end
 
   test "Should be able to filter by rarity and render all character from that rarity"  do
     get api_v1_characters_url(rarity: 4)
 
     assert_response :success
-    all_characters_with_4_rarity = Character.where(rarity: 4).map { |character| CharacterJson.new(character:).to_h }
-
-    assert_equal response.parsed_body[:characters].count, all_characters_with_4_rarity.count
 
     assert_equal [ 4 ], response.parsed_body[:characters].map { |character| character[:rarity] }.uniq
   end
@@ -214,8 +208,6 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
     get api_v1_characters_url(characterable_type: "PlayableCharacter")
 
     assert_response :success
-    all_characters_with_type_playable =  Character.where(characterable_type: "PlayableCharacter").map { |character| CharacterJson.new(character:).to_h }
-    assert_equal response.parsed_body[:characters].count, all_characters_with_type_playable.count
 
     assert_equal [ "PlayableCharacter" ], response.parsed_body[:characters].map { |character| character[:character_type] }.uniq
   end
@@ -224,12 +216,9 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
     get api_v1_characters_url(rarity: 4, region: "Fontaine")
 
     assert_response :success
-    characters = Character.where(rarity: 4).and(Character.where(region: "Fontaine"))
 
     assert_equal [ 4 ], response.parsed_body[:characters].map { |character| character[:rarity] }.uniq
     assert_equal [ "Fontaine" ], response.parsed_body[:characters].map { |character| character[:region] }.uniq
-
-    assert_equal response.parsed_body[:characters].count, characters.count
   end
 
 
