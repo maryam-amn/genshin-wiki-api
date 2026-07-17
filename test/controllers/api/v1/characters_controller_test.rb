@@ -241,4 +241,30 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
 
     assert_includes response.parsed_body[:error], details_message
   end
+
+  test "index should be able to paginate" do
+    get api_v1_characters_url(page: 1, per_page: 3)
+
+    assert_response :success
+    expected_pagination = {
+      next_page: 2,
+      last_page: 2,
+      current_page: 1
+    }
+
+    assert_equal 3, response.parsed_body[:characters].count
+    assert_equal expected_pagination.as_json, response.parsed_body["pagination"].as_json
+
+    get api_v1_characters_url(page: 2, per_page: 2)
+
+    assert_response :success
+    expected_pagination = {
+      next_page: nil,
+      last_page: 2,
+      current_page: 2
+    }
+
+    assert_equal 2, response.parsed_body[:characters].count
+    assert_equal expected_pagination.as_json, response.parsed_body["pagination"].as_json
+  end
 end

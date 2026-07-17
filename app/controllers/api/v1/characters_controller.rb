@@ -14,9 +14,17 @@ class Api::V1::CharactersController < ApiController
       def index
         conditions = permitted_params_to_filter.slice(:region, :rarity, :characterable_type).to_h.compact
         characters = Character.where(conditions)
-        characters_json = characters.map { |character| CharacterJson.new(character:).to_h }
-        render json: { characters: characters_json }, status: :ok
-   end
+        characters_per_page = characters.page(params[:page]).per(params[:per_page])
+        characters_json = characters_per_page.map { |character| CharacterJson.new(character:).to_h }
+        render json: {
+          characters: characters_json,
+          pagination: {
+            next_page: characters_per_page.next_page,
+            last_page: characters_per_page.total_pages,
+            current_page: characters_per_page.current_page
+          }
+        }, status: :ok
+      end
 
       api :GET, "/characters/:id", "render a character"
       api_version "v1"
