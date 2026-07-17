@@ -14,10 +14,8 @@ class Api::V1::CharactersController < ApiController
       def index
         conditions = permited_params_to_filter.slice(:region, :rarity, :characterable_type).to_h.compact
         characters = Character.where(conditions)
-
-
-          characters_json = characters.map { |character| CharacterJson.new(character:).to_h }
-          render json: { characters: characters_json }, status: :ok
+        characters_json = characters.map { |character| CharacterJson.new(character:).to_h }
+        render json: { characters: characters_json }, status: :ok
    end
 
       api :GET, "/characters/:id", "render a character"
