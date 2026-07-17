@@ -12,7 +12,7 @@ class Api::V1::CharactersController < ApiController
       param :characterable_type, [ "PlayableCharacter" ], desc: "Filter to get all character by type of character"
 
       def index
-        conditions = permited_params_to_filter.slice(:region, :rarity, :characterable_type).to_h.compact
+        conditions = permitted_params_to_filter.slice(:region, :rarity, :characterable_type).to_h.compact
         characters = Character.where(conditions)
         characters_json = characters.map { |character| CharacterJson.new(character:).to_h }
         render json: { characters: characters_json }, status: :ok
@@ -82,7 +82,7 @@ class Api::V1::CharactersController < ApiController
       rescue ActiveRecord::RecordNotFound
         render status: :not_found, json: { message: "Character not found" }
       end
-      def permited_params_to_filter
+      def permitted_params_to_filter
         params.permit(:region, :rarity, :characterable_type)
       end
 end

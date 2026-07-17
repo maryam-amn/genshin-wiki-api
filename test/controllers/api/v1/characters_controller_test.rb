@@ -194,7 +194,7 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     assert_equal [ "Fontaine" ], response.parsed_body[:characters].map { |character| character[:region] }.uniq
-   end
+  end
 
   test "Should be able to filter by rarity and render all character from that rarity"  do
     get api_v1_characters_url(rarity: 4)
@@ -222,7 +222,7 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
   end
 
 
-  test "Should return an error message if no character is found using a filter" do
+  test "Should return an empty array if no characters are found for the given filters" do
     get api_v1_characters_url(rarity: 7)
 
     assert_response :ok
