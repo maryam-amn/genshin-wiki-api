@@ -253,18 +253,43 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_equal 3, response.parsed_body[:characters].count
-    assert_equal expected_pagination.as_json, response.parsed_body["pagination"].as_json
+    assert_equal expected_pagination.as_json, response.parsed_body[:pagination].as_json
+  end
 
-    get api_v1_characters_url(page: 2, per_page: 2)
+  test "Should be able to paginate and filter " do
+    get api_v1_characters_url(page: 1, per_page: 1, rarity: 4)
 
     assert_response :success
     expected_pagination = {
-      next_page: nil,
+      next_page: 2,
       last_page: 2,
-      current_page: 2
+      current_page: 1
     }
 
-    assert_equal 2, response.parsed_body[:characters].count
-    assert_equal expected_pagination.as_json, response.parsed_body["pagination"].as_json
+    assert_equal 1, response.parsed_body[:characters].count
+    assert_equal [ 4 ], response.parsed_body[:characters].map { |character| character[:rarity] }.uniq
+    assert_equal expected_pagination.as_json, response.parsed_body[:pagination].as_json
+  end
+
+  test "Should render an error message when the parameter 'per_page' is set to zero" do
+    get api_v1_characters_url(page: 1, per_page: 0)
+
+    assert_response :unprocessable_entity
+
+    expected_error_message = I18n.t("Api.error.pagination.value_per_page_is_set_to_zero")
+    expected_details_message = "Current page was incalculable"
+
+    assert_equal expected_error_message.as_json, response.parsed_body[:error]
+
+    assert_includes response.parsed_body[:details][:field].to_s, expected_details_message
+  end
+
+  test "Should return an error message if the value of a parameter has no value or is nil" do
+    get api_v1_characters_url + "?page=nil"
+
+    assert_response :unprocessable_entity
+
+    expected_error_message = "Invalid parameter 'page'"
+    assert_includes response.parsed_body[:error], expected_error_message
   end
 end
