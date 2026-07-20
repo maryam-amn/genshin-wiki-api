@@ -187,4 +187,58 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
 
     assert_includes response.parsed_body[:message], error_message.as_json
   end
+
+  test "Should be able to filter by region and render all character from that region" do
+    get api_v1_characters_url(region: "Fontaine")
+
+    assert_response :success
+
+    assert_equal [ "Fontaine" ], response.parsed_body[:characters].map { |character| character[:region] }.uniq
+  end
+
+  test "Should be able to filter by rarity and render all character from that rarity"  do
+    get api_v1_characters_url(rarity: 4)
+
+    assert_response :success
+
+    assert_equal [ 4 ], response.parsed_body[:characters].map { |character| character[:rarity] }.uniq
+  end
+
+  test "Should be able to filter by type of character and render all character from that type"  do
+    get api_v1_characters_url(characterable_type: "PlayableCharacter")
+
+    assert_response :success
+
+    assert_equal [ "PlayableCharacter" ], response.parsed_body[:characters].map { |character| character[:character_type] }.uniq
+  end
+
+  test "Should be able to filter using two different filters and return all matching objects"  do
+    get api_v1_characters_url(rarity: 4, region: "Fontaine")
+
+    assert_response :success
+
+    assert_equal [ 4 ], response.parsed_body[:characters].map { |character| character[:rarity] }.uniq
+    assert_equal [ "Fontaine" ], response.parsed_body[:characters].map { |character| character[:region] }.uniq
+  end
+
+
+  test "Should return an empty array if no characters are found for the given filters" do
+    get api_v1_characters_url(rarity: 7)
+
+    assert_response :ok
+
+    expected_result = []
+
+    assert_equal expected_result, response.parsed_body[:characters]
+  end
+
+  test "Should render an message when the the spelling of the search query is incorrect" do
+    get api_v1_characters_url(region: "Fontain")
+
+    assert_response :unprocessable_entity
+
+    details_message = "Invalid parameter 'region'"
+
+    assert_includes response.parsed_body[:error], details_message
+  end
 end

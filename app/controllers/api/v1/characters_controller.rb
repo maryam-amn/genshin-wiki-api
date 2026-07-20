@@ -6,16 +6,22 @@ class Api::V1::CharactersController < ApiController
       api :GET, "/characters", "list of all characters"
       api_version "v1"
       returns code: 200
+
+      param :region, [ "Liyue", "Fontaine", "Montstadt" ], desc: "Filter to show all characters from a region"
+      param :rarity, :number, between: [ 1...5 ], desc: "Filter to show all characters of a rarity"
+      param :characterable_type, [ "PlayableCharacter" ], desc: "Filter to get all character by type of character"
+
       def index
-        characters_json = Character.all.map { |character| CharacterJson.new(character:).to_h }
-        render json: { characters: characters_json }
-      end
+        conditions = permitted_params_to_filter.slice(:region, :rarity, :characterable_type).to_h.compact
+        characters = Character.where(conditions)
+        characters_json = characters.map { |character| CharacterJson.new(character:).to_h }
+        render json: { characters: characters_json }, status: :ok
+   end
 
       api :GET, "/characters/:id", "render a character"
       api_version "v1"
       returns code: 200
       error :not_found, "character not found"
-
       def show
         begin
           character = Character.find(params[:id])
@@ -75,5 +81,8 @@ class Api::V1::CharactersController < ApiController
         end
       rescue ActiveRecord::RecordNotFound
         render status: :not_found, json: { message: "Character not found" }
+      end
+      def permitted_params_to_filter
+        params.permit(:region, :rarity, :characterable_type)
       end
 end
