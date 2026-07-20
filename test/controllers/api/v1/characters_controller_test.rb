@@ -253,7 +253,7 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_equal 3, response.parsed_body[:characters].count
-    assert_equal expected_pagination.as_json, response.parsed_body[:pagination].as_json
+    assert_equal expected_pagination.as_json, response.parsed_body[:pagination]
   end
 
   test "Should be able to paginate and filter " do
@@ -268,7 +268,7 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal 1, response.parsed_body[:characters].count
     assert_equal [ 4 ], response.parsed_body[:characters].map { |character| character[:rarity] }.uniq
-    assert_equal expected_pagination.as_json, response.parsed_body[:pagination].as_json
+    assert_equal expected_pagination.as_json, response.parsed_body[:pagination]
   end
 
   test "Should render an error message when the parameter 'per_page' is set to zero" do
@@ -291,5 +291,19 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
 
     expected_error_message = "Invalid parameter 'page'"
     assert_includes response.parsed_body[:error], expected_error_message
+  end
+
+  test "Should return an empty array when there are no characters on the page you're on" do
+    get api_v1_characters_url(page: 600, per_page: 4)
+    assert_response :ok
+
+    expected_result = {
+      next_page: nil,
+      last_page: 1,
+      current_page: 600
+     }
+
+    assert_equal [], response.parsed_body[:characters]
+    assert_equal expected_result.as_json, response.parsed_body[:pagination]
   end
 end
