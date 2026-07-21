@@ -1,0 +1,23 @@
+stormterror_from_mondsatdt:
+  id: 1016727071
+  is_weekly_boss: true
+  location: Montstadt [Montagnes de Brillecouronne]
+  recommended_level: 18
+
+signora_from_mondsatdt:
+  id: 1016727072
+  is_weekly_boss: true
+  location: Inazuma [l'île Narukami - Tenshukaku]
+  recommended_level: 30
+
+andrius_from_mondsatdt:
+  id: 1016727073
+  is_weekly_boss: true
+  location: Mondstadt [Territoire des Loups]
+  recommended_level: 50
+
+tartaglia_from_mondsatdt:
+  id: 1016727074
+  is_weekly_boss: true
+  location: Liyue [Donjon «Chambre d'Or»]
+  recommended_level: 30
