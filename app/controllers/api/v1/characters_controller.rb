@@ -23,7 +23,7 @@ class Api::V1::CharactersController < ApiController
           characters: characters_json,
           pagination: {
             next_page: characters_per_page.next_page,
-            last_page: characters_per_page.total_pages,
+            total_page: characters_per_page.total_pages,
             current_page: characters_per_page.current_page
           }
         }, status: :ok

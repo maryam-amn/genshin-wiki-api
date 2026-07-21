@@ -248,7 +248,7 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     expected_pagination = {
       next_page: 2,
-      last_page: 2,
+      total_page: 2,
       current_page: 1
     }
 
@@ -262,7 +262,7 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     expected_pagination = {
       next_page: 2,
-      last_page: 2,
+      total_page: 2,
       current_page: 1
     }
 
@@ -299,7 +299,7 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
 
     expected_result = {
       next_page: nil,
-      last_page: 1,
+      total_page: 1,
       current_page: 600
      }
 
