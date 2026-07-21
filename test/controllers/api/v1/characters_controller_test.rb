@@ -246,10 +246,12 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
     get api_v1_characters_url(page: 1, per_page: 3)
 
     assert_response :success
+    characters_per_page = Character.all.page(1).per(3)
+
     expected_pagination = {
-      next_page: 2,
-      total_page: 2,
-      current_page: 1
+      next_page: characters_per_page.next_page,
+      total_page: characters_per_page.total_pages,
+      current_page: characters_per_page.current_page
     }
 
     assert_equal 3, response.parsed_body[:characters].count
@@ -262,7 +264,7 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     expected_pagination = {
       next_page: 2,
-      total_page: 2,
+      total_page: Character.where(rarity: 4).all.page(1).per(1).total_pages,
       current_page: 1
     }
 
@@ -294,7 +296,7 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Should return an empty array when there are no characters on the page you're on" do
-    get api_v1_characters_url(page: 600, per_page: 4)
+    get api_v1_characters_url(page: 600, per_page: Character.count)
     assert_response :ok
 
     expected_result = {
