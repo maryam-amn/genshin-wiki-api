@@ -3,9 +3,11 @@ require "test_helper"
 class Admin::CharactersControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
-  test "Should get index and show information of all characters when the user is logged in " do
+  setup do
     sign_in users(:admin_users)
+  end
 
+  test "Should get index and show information of all characters when the user is logged in " do
     get admin_characters_url
 
     assert_response :success
@@ -24,8 +26,6 @@ class Admin::CharactersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "we should be able to create a new user" do
-    sign_in users(:admin_users)
-
     assert_difference -> { Character.count } => +1 do
       post admin_characters_path, params: {
         character: {
@@ -58,8 +58,6 @@ class Admin::CharactersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Can't create a new character when a field is blank " do
-    sign_in users(:admin_users)
-
     character = Character.new(name: "Ganyu", region: "Liyue", description: "un personnage 5 étoiles", rarity: "")
 
     assert_predicate character, :invalid?
@@ -69,12 +67,42 @@ class Admin::CharactersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Should redirect to the playable character show page" do
-    sign_in users(:admin_users)
-    character = characters(:charlotte_from_fontaine_region)
+    playable_character = characters(:charlotte_from_fontaine_region)
 
-    get admin_character_url(character.id)
+    get admin_character_url(playable_character.id)
 
     assert_response :redirect
-    assert_redirected_to admin_playable_character_path(character.id)
+
+    assert_redirected_to admin_playable_character_path(playable_character.characterable_id)
+  end
+
+  test "Should redirect to the playable character edit page when a user is logged in" do
+    playable_character = characters(:charlotte_from_fontaine_region)
+
+    get edit_admin_character_url(playable_character.id)
+
+    assert_response :redirect
+
+    assert_redirected_to edit_admin_playable_character_path(playable_character.characterable_id)
+  end
+
+  test "Should redirect to the boss character show page" do
+    boss_character = characters(:signora_from_mondsatdt)
+
+    get admin_character_url(boss_character.id)
+
+    assert_response :redirect
+
+    assert_redirected_to admin_boss_character_path(boss_character.characterable_id)
+  end
+
+  test "Should redirect to the boss edit page when a user is logged in" do
+    boss_character = characters(:signora_from_mondsatdt)
+
+    get edit_admin_character_url(boss_character.id)
+
+    assert_response :redirect
+
+    assert_redirected_to edit_admin_boss_character_path(boss_character.characterable_id)
   end
 end

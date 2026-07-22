@@ -1,7 +1,6 @@
 ActiveAdmin.register Character do
   permit_params :name, :region, :rarity, :description, :character_id
   before_action :find_character, only: [ :show, :edit ]
-
   actions :all, except: [ :destroy, :update ]
   filter :rarity
   filter :region, as: :select, collection: proc { Character.regions.keys }
@@ -14,7 +13,9 @@ ActiveAdmin.register Character do
       column :name
       column :region
       column :rarity
-      column :description
+      column :description do |character|
+        character.description.truncate(150)
+      end
       column :characterable_type
       actions
     end
@@ -35,12 +36,16 @@ ActiveAdmin.register Character do
       def show
         if @character.characterable_type == "PlayableCharacter"
           redirect_to admin_playable_character_path(id: @character.characterable_id)
+        elsif @character.characterable_type == "BossCharacter"
+          redirect_to admin_boss_character_path(id: @character.characterable_id)
         end
       end
 
       def edit
         if @character.characterable_type == "PlayableCharacter"
           redirect_to edit_admin_playable_character_path(id: @character.characterable_id)
+        elsif @character.characterable_type == "BossCharacter"
+          redirect_to edit_admin_boss_character_path(id: @character.characterable_id)
         end
       end
 
