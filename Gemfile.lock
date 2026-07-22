@@ -447,6 +447,7 @@ DEPENDENCIES
   draper
   image_processing (~> 1.2)
   kamal
+  kaminari
   lefthook
   pg (~> 1.1)
   puma (>= 5.0)
