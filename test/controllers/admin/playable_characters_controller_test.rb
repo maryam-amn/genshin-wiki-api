@@ -25,7 +25,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
 
     assert_redirected_to admin_playable_character_path(PlayableCharacter.last.id)
-    assert_includes flash[:notice], I18n.t("Playable_Characters.create.notice")
+    assert_includes flash[:notice], I18n.t("playable_characters.create.notice")
 
     assert_equal  PlayableCharacter.last&.base_hp.to_f, 150.0
     assert_equal  PlayableCharacter.last&.name.to_s, "Fischl"
@@ -74,7 +74,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to new_admin_playable_character_path
 
-    assert_includes flash[:alert], I18n.t("Playable_Characters.create.record_invalid")
+    assert_includes flash[:alert], I18n.t("playable_characters.create.record_invalid")
   end
 
   test "we shouldn't be able to create a playable characters if the playable character's field are not valid" do
@@ -96,7 +96,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to new_admin_playable_character_path
 
-    assert_includes flash[:alert], I18n.t("Playable_Characters.create.record_invalid")
+    assert_includes flash[:alert], I18n.t("playable_characters.create.record_invalid")
   end
   test "Should be able to delete a playable character" do
     character = playable_characters(:yanfei_from_fontaine_region)
@@ -108,7 +108,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     assert_redirected_to admin_characters_path
 
-    assert_includes flash[:notice], I18n.t("Playable_Characters.destroy.notice")
+    assert_includes flash[:notice], I18n.t("playable_characters.destroy.notice")
   end
 
   test "Shouldn't be able to delete a playable character who is a 5 star" do
@@ -121,7 +121,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     assert_redirected_to admin_characters_path
 
-    assert_includes flash[:error], I18n.t("Characters.destroy.should_not_delete_legendary_character")
+    assert_includes flash[:error], I18n.t("characters.destroy.should_not_delete_legendary_character")
   end
 
   test "Should be able to update a playable character if we change the value of a field using a PATCH request" do
@@ -144,7 +144,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
 
     playable_character.reload
 
-    assert_includes flash[:notice], I18n.t("Playable_Characters.update.success")
+    assert_includes flash[:notice], I18n.t("playable_characters.update.success")
 
     assert_equal 150.0, playable_character.base_hp
     assert_equal "Fontaine", playable_character.character.region
@@ -170,7 +170,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
 
     playable_character.reload
 
-    assert_includes flash[:notice], I18n.t("Playable_Characters.update.success")
+    assert_includes flash[:notice], I18n.t("playable_characters.update.success")
 
     assert_equal 159.0, playable_character.base_hp
     assert_equal "Liyue", playable_character.character.region
@@ -194,7 +194,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to edit_admin_playable_character_path
 
     playable_character.reload
-    assert_includes flash[:error], I18n.t("Playable_Characters.update.record_invalid")
+    assert_includes flash[:error], I18n.t("playable_characters.update.record_invalid")
 
     assert_equal "Liyue", playable_character.region
     assert_equal 20.12, playable_character.base_attack
@@ -220,7 +220,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to edit_admin_playable_character_path
 
     playable_character.reload
-    assert_includes flash[:error], I18n.t("Playable_Characters.update.record_invalid")
+    assert_includes flash[:error], I18n.t("playable_characters.update.record_invalid")
 
     assert_equal "Fontaine", playable_character.region
     assert_equal 14.51, playable_character.base_attack
@@ -239,7 +239,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     assert_redirected_to edit_admin_playable_character_path
 
-    assert_includes flash[:error], I18n.t("Playable_Characters.update.record_invalid")
+    assert_includes flash[:error], I18n.t("playable_characters.update.record_invalid")
 
     assert_equal 18.99, playable_character.base_attack
     assert_not_equal 50, playable_character.base_attack
@@ -257,7 +257,7 @@ class Admin::PlayableCharactersControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     assert_redirected_to edit_admin_playable_character_path
 
-    assert_includes flash[:error], I18n.t("Playable_Characters.update.record_invalid")
+    assert_includes flash[:error], I18n.t("playable_characters.update.record_invalid")
     assert_equal 14.51, playable_character.base_attack
     assert_not_equal 50, playable_character.base_attack
   end

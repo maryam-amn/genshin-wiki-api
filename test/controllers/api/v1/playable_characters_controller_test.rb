@@ -31,7 +31,7 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
 
     assert_response :not_found
 
-    error_message = I18n.t("Playable_Characters.errors.record_not_found")
+    error_message = I18n.t("playable_characters.errors.record_not_found")
 
     assert_includes response.parsed_body[:error], error_message.as_json
   end
@@ -73,7 +73,7 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
 
     assert_response :unprocessable_entity
 
-    error_message = { error: I18n.t("Playable_Characters.create.record_invalid"), details: { field: [ "Validation failed: Base hp can't be blank" ] } }
+    error_message = { error: I18n.t("playable_characters.create.record_invalid"), details: { field: [ "Validation failed: Base hp can't be blank" ] } }
 
     assert_equal response.parsed_body, error_message.as_json
 
@@ -96,7 +96,7 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
 
     assert_response :unprocessable_entity
 
-    error_message = { error: I18n.t("Playable_Characters.create.record_invalid"), details: { field: [ "Validation failed: Name can't be blank" ] } }
+    error_message = { error: I18n.t("playable_characters.create.record_invalid"), details: { field: [ "Validation failed: Name can't be blank" ] } }
 
     assert_equal response.parsed_body, error_message.as_json
 
@@ -119,7 +119,7 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
 
     assert_response :unprocessable_entity
 
-    error_message = { error: I18n.t("Playable_Characters.create.record_invalid"), details: { field: [ "Validation failed: Name has already been taken" ] } }
+    error_message = { error: I18n.t("playable_characters.create.record_invalid"), details: { field: [ "Validation failed: Name has already been taken" ] } }
 
     assert_equal response.parsed_body, error_message.as_json
 
@@ -136,7 +136,7 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
 
     assert_response :ok
 
-    assert_equal response.parsed_body[:message], I18n.t("Playable_Characters.destroy.notice")
+    assert_equal response.parsed_body[:message], I18n.t("playable_characters.destroy.notice")
   end
 
   test "Shouldn't be able to delete a playable character who doesn't exist in the database" do
@@ -146,7 +146,7 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
 
    assert_response :not_found
 
-    assert_equal response.parsed_body[:error], I18n.t("Playable_Characters.errors.record_not_found").as_json
+    assert_equal response.parsed_body[:error], I18n.t("playable_characters.errors.record_not_found").as_json
   end
 
 
@@ -159,7 +159,7 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
 
     assert_response :unprocessable_entity
 
-    assert_includes response.parsed_body[:details][:field], I18n.t("Characters.destroy.should_not_delete_legendary_character").as_json
+    assert_includes response.parsed_body[:details][:field], I18n.t("characters.destroy.should_not_delete_legendary_character").as_json
   end
 
   test "Should be able to update a playable character using a PATCH request" do
@@ -217,7 +217,7 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
 
     assert_response :unprocessable_entity
 
-    error_message = I18n.t("Playable_Characters.update.record_invalid")
+    error_message = I18n.t("playable_characters.update.record_invalid")
 
     assert_includes response.parsed_body[:error], error_message.as_json
 
@@ -240,7 +240,7 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
 
     assert_response :unprocessable_entity
 
-    error_message = I18n.t("Playable_Characters.update.record_invalid")
+    error_message = I18n.t("playable_characters.update.record_invalid")
 
     assert_includes response.parsed_body[:error], error_message.as_json
 
@@ -253,7 +253,7 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
     patch api_v1_playable_character_url(id: playable_character.id), params: { base_hp: "", ie_limited: false }
     assert_response :unprocessable_entity
 
-    error_message = I18n.t("Playable_Characters.update.record_invalid")
+    error_message = I18n.t("playable_characters.update.record_invalid")
 
     assert_equal response.parsed_body[:error], error_message.as_json
 
@@ -275,7 +275,7 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
         }
     assert_response :unprocessable_entity
 
-    error_message = I18n.t("Playable_Characters.update.record_invalid")
+    error_message = I18n.t("playable_characters.update.record_invalid")
 
     assert_equal response.parsed_body[:error], error_message.as_json
 
@@ -289,7 +289,7 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
 
     assert_response :unprocessable_entity
 
-    error_message = I18n.t("Playable_Characters.update.record_invalid")
+    error_message = I18n.t("playable_characters.update.record_invalid")
 
     assert_equal response.parsed_body[:error], error_message.as_json
 
@@ -313,7 +313,7 @@ class Api::V1::PlayableCharactersControllerTest < ActionDispatch::IntegrationTes
 
     assert_response :unprocessable_entity
 
-    error_message = I18n.t("Playable_Characters.update.record_invalid")
+    error_message = I18n.t("playable_characters.update.record_invalid")
 
     assert_equal response.parsed_body[:error], error_message.as_json
 

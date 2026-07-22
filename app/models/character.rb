@@ -5,9 +5,9 @@ class Character < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
   validates :description, presence: true,  length: { maximum: 400 }
-  validates :rarity, presence: true, numericality:  { only_integer: true, message: I18n.t("Characters.errors.number_presence") },
-            inclusion: { in: 1..5, message: I18n.t("Characters.errors.number_between_1_5")   }
-  validates :region, presence: { message: I18n.t("Characters.errors.choose_region") }
+  validates :rarity, presence: true, numericality:  { only_integer: true, message: I18n.t("characters.errors.number_presence") },
+            inclusion: { in: 1..5, message: I18n.t("characters.errors.number_between_1_5")   }
+  validates :region, presence: { message: I18n.t("characters.errors.choose_region") }
   enum :region, %w[ Liyue Fontaine Montstadt ].index_by(&:itself)
   before_destroy :check_legendary_character
 
@@ -21,7 +21,7 @@ class Character < ApplicationRecord
 
   def check_legendary_character
     if rarity == 5
-      errors.add(:base, I18n.t("Characters.destroy.should_not_delete_legendary_character"))
+      errors.add(:base, I18n.t("characters.destroy.should_not_delete_legendary_character"))
       throw :abort
     end
   end
