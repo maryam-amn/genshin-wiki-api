@@ -13,6 +13,6 @@ class ApiController < ActionController::Base
     render json: { error: error.message }, status: :unprocessable_content
   end
   def render_pagination_error(error)
-    render json: { error: I18n.t("Api.error.pagination.value_per_page_is_set_to_zero"), details: { field: [ error.message ] } }, status: :unprocessable_content
+    render json: { error: I18n.t("api.error.pagination.value_per_page_is_set_to_zero"), details: { field: [ error.message ] } }, status: :unprocessable_content
   end
 end
