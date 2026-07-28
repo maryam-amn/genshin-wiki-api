@@ -1,6 +1,3 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-
 charlotte_from_fontaine_region :
   name: Charlotte
   description: Charlotte est un personnage Cryo 4 étoile, journaliste pour L'Oiseau de vapeur, le célébre journal de Fontaine
@@ -32,3 +29,43 @@ eula_from_mondsatdt:
   region: Montstadt
   characterable_type: "PlayableCharacter"
   characterable_id: 867337946
+
+stormterror_from_mondsatdt:
+  name: Stormterror
+  description: Stormterror aussi connu sous le nom de Dvalin est le dragon Anémo de l'Est, et un des Quatre Vents de Mondstadt. Il protège Mondstadt et aide Barbatos (l'Archon Anémo) depuis près de 2 000 ans.
+    Le plus pur des joyaux se couvre de poussière lorsqu'il passe de longues années dans l'obscurité. De la même façon, le cœur de ce noble dragon fut rongé par le chagrin et les ténèbres après avoir été empoisonné lors de son combat titanesque contre le dragon noir Durin.
+    Cependant, il existe toujours un moyen de se débarrasser aussi bien de la poussière comme du venin ;  la brise de la liberté et la musique d'un ami fidèle.
+  rarity: 0
+  region: Montstadt
+  characterable_type: "BossCharacter"
+  characterable_id: 1016727071
+
+signora_from_mondsatdt:
+  name: Signora
+  description: Rosalyne-Kruzchka Lohefalter, également appelée Signora ou par son alias « La Demoiselle », était la Huitième Exécutrice des Fatui et une antagoniste de soutien dans les premiers chapitres.
+    Elle est la première Exécutrice à apparaître dans le jeu lorsqu'elle tend une embuscade contre Venti pour lui voler son Gnosis.
+    En fin de compte, elle a perdu contre le Voyageur dans leur duel devant le trône sous les yeux de la Shogun Raiden, et st immédiatement exécutée par la Shogun Raiden d'un coup de sabre dévastateur.
+  rarity: 5
+  region: Montstadt
+  characterable_type: "BossCharacter"
+  characterable_id: 1016727072
+
+andrius_from_mondsatdt:
+  name: Andrius
+  description: Andrius, aussi connu sous le nom de “Loup du Nord” ou “Borée”, est un ancien dieu de Mondstadt et un boss hebdomadaire de Genshin Impact. Il protège le Royaume des Loups et veille avec bienveillance sur Razor.
+    Il est le plus noble et le plus beau des âmes qui veillent sur le Lupical. Quand la meute est en péril, il émerge sous la forme d'un loup d'hydro et de cryo pour montrer ses crocs et ses griffes.
+    Les humains ont rarement l'occasion de croiser le regard d'un loup, ainsi en a décidé le Loup du Nord.
+  rarity: 0
+  region: Montstadt
+  characterable_type: "BossCharacter"
+  characterable_id: 1016727073
+
+tartaglia_from_mondsatdt:
+  name: Tartaglia
+  description: Tartaglia de son vrai nom Ajax, aussi connu sous son nom de code Childe (« Jeune Sire »), est le onzième des Exécuteurs Fatui.
+    Il manie un Œil divin Hydro et peut libérer un sinistre Œil maléfique Électro.Il  combat au moyen d'arts martiaux qu'il a appris dans l'Abîme, une terre couverte par les ténèbres.
+    Chaque conflit sanglant, chaque lutte à mort est une épreuve réjouissante à ses yeux. Certains disent que le jeune Tartaglia est célèbre sur tout le continent pour ses prouesses au combat.
+  rarity: 5
+  region: Montstadt
+  characterable_type: "BossCharacter"
+  characterable_id: 1016727074
