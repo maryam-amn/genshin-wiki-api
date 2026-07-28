@@ -107,7 +107,7 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
 
-    error_message = I18n.t("Characters.destroy.should_not_delete_legendary_character")
+    error_message = I18n.t("characters.destroy.should_not_delete_legendary_character")
 
     assert_includes response.parsed_body[:message], error_message.as_json
   end
@@ -278,7 +278,7 @@ class Api::V1::CharactersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
 
-    expected_error_message = I18n.t("Api.error.pagination.value_per_page_is_set_to_zero")
+    expected_error_message = I18n.t("api.error.pagination.value_per_page_is_set_to_zero")
     expected_details_message = "Current page was incalculable"
 
     assert_equal expected_error_message.as_json, response.parsed_body[:error]
