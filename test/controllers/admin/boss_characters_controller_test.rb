@@ -28,4 +28,74 @@ class Admin::BossCharactersControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     assert_redirected_to new_user_session_path
   end
+
+  test "Should create a new boss character if all the fields have been completed" do
+    assert_difference -> { Character.count } => +1, -> { BossCharacter.count } => +1 do
+    post admin_boss_characters_path, params: {
+      boss_character: {
+        name: "Fischl",
+        region: "Montstadt",
+        rarity: 3,
+        description: "un personnage 3 étoiles",
+        is_weekly_boss: true,
+        recommended_level: 50,
+        region_location: "Fontaine",
+        exact_location: "la chambre des secret"
+      }
+    }
+    end
+
+    assert_response :redirect
+
+    assert_redirected_to admin_boss_character_path(BossCharacter.last.id)
+
+    assert_equal flash[:notice], I18n.t("boss_character.new.notice")
+
+    assert_equal  BossCharacter.last&.recommended_level, 50
+    assert_equal  BossCharacter.last&.name.to_s, "Fischl"
+  end
+
+  test "Shouldn't be able to create a boss character if the character's field aren't valid" do
+    assert_difference -> { Character.count } => 0, -> { BossCharacter.count } => 0 do
+    post admin_boss_characters_path, params: {
+      boss_character: {
+        name: "Fischl",
+        region: "",
+        rarity: "",
+        description: "un personnage 3 étoiles",
+        is_weekly_boss: true,
+        recommended_level: 50,
+        region_location: "Fontaine",
+        exact_location: "la chambre des secret "
+      }
+    }
+    end
+
+    assert_response :redirect
+
+    assert_redirected_to new_admin_boss_character_path
+
+    assert_includes flash[:error], "#{I18n.t("boss_character.new.record_invalid")}, Validation failed:"
+  end
+
+  test "Shouldn't be able to create a boss character if the boss's filed aren't valid" do
+    assert_difference -> { Character.count } => 0, -> { BossCharacter.count } => 0 do
+    post admin_boss_characters_path, params: {
+      boss_character: {
+        name: "Fischl",
+        region: "Fontaine",
+        rarity: 2,
+        description: "un personnage 3 étoiles",
+        is_weekly_boss: true,
+        recommended_level: "",
+        region_location: "ffff",
+        exact_location: ""
+      }
+    }
+    end
+
+    assert_response :redirect
+    assert_redirected_to new_admin_boss_character_path
+    assert_includes flash[:error], "#{I18n.t("boss_character.new.record_invalid")}, Validation failed:"
+  end
 end

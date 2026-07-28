@@ -29,6 +29,14 @@
 
 en:
   hello: "Hello world"
+  boss_character:
+      new:
+        create_title: "Create a new boss character"
+        details_boss: "Details of the boss character"
+        details_character: "Details of a character"
+        location_notice: "Fill in the fields about the boss character :"
+        notice: "The boss character was successfully created !"
+        record_invalid: "The boss character can't be created"
   Characters:
       new:
         add: "Add a Character"
