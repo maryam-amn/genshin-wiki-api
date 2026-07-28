@@ -2,7 +2,8 @@ ActiveAdmin.register BossCharacter do
    menu false
 
    permit_params :is_weekly_boss, :recommended_level, :exact_location, :region_location
-   actions :all, except: [ :destroy, :update ]
+   actions :all, except: [ :update ]
+   before_action :find_boss_character, only: [ :destroy, :show ]
 
    show do
       attributes_table do
@@ -49,11 +50,28 @@ ActiveAdmin.register BossCharacter do
          redirect_to new_admin_boss_character_url
       end
 
+      def destroy
+         ActiveRecord::Base.transaction do
+            @boss_character.character.destroy!
+         end
+         flash[:notice] = I18n.t("boss_character.destroy.notice")
+         redirect_to admin_characters_path
+      rescue ActiveRecord::RecordNotDestroyed  => e
+         flash[:error] = "#{@boss_character.character.errors[:base].to_a.join}, #{e} "
+         redirect_to admin_boss_character_path(@boss_character.id)
+      end
+
       def boss_permitted_params
          params.expect(boss_character: [ :is_weekly_boss, :recommended_level, :region_location, :exact_location ])
       end
       def character_permitted_params
           params.expect([ boss_character: [ :name, :description, :rarity, :region ] ])
+      end
+      def find_boss_character
+         @boss_character = BossCharacter.find(params[:id])
+      rescue ActiveRecord::RecordNotFound => e
+         flash[:error] = "#{I18n.t("boss_character.active_record_error.record_not_found")}, #{e} "
+         redirect_to admin_characters_path
       end
    end
 end

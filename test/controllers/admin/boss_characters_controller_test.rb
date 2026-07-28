@@ -98,4 +98,38 @@ class Admin::BossCharactersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_admin_boss_character_path
     assert_includes flash[:error], "#{I18n.t("boss_character.new.record_invalid")}, Validation failed:"
   end
+
+  test "Should be able to delete a boss character" do
+    boss_character = boss_characters(:andrius_from_mondsatdt)
+
+    assert_difference -> { Character.count } => -1, -> { BossCharacter.count } => -1 do
+      delete admin_boss_character_path(boss_character.id)
+    end
+    assert_response :redirect
+
+    assert_redirected_to admin_characters_path
+    assert_equal flash[:notice], I18n.t("boss_character.destroy.notice")
+  end
+
+  test "Shouldn't be able to delete a boss character if the character is a legendary one" do
+    boss_character = boss_characters(:signora_from_mondsatdt)
+
+    assert_difference -> { Character.count } => 0, -> { BossCharacter.count } => 0 do
+      delete admin_boss_character_path(boss_character.id)
+    end
+    assert_response :redirect
+
+    assert_redirected_to admin_boss_character_path(boss_character.id)
+    assert_includes flash[:error], boss_character.character.errors[:base].to_a.join
+  end
+
+  test "Shouldn't be able to delete a boss character if the character doesn't exist" do
+    assert_difference -> { Character.count } => 0, -> { BossCharacter.count } => 0 do
+      delete admin_boss_character_path(0)
+    end
+    assert_response :redirect
+
+    assert_redirected_to admin_characters_path
+    assert_includes flash[:error], I18n.t("boss_character.active_record_error.record_not_found")
+  end
 end
