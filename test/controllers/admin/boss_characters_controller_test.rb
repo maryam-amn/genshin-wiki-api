@@ -39,8 +39,8 @@ class Admin::BossCharactersControllerTest < ActionDispatch::IntegrationTest
         description: "un personnage 3 étoiles",
         is_weekly_boss: true,
         recommended_level: 50,
-        region_location: "Fontaine",
-        exact_location: "la chambre des secret"
+        fight_region_location: "Fontaine",
+        fight_exact_location: "la chambre des secret"
       }
     }
     end
@@ -49,7 +49,7 @@ class Admin::BossCharactersControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to admin_boss_character_path(BossCharacter.last.id)
 
-    assert_equal flash[:notice], I18n.t("boss_character.new.notice")
+    assert_equal flash[:notice], I18n.t("boss_characters.new.notice")
 
     assert_equal  BossCharacter.last&.recommended_level, 50
     assert_equal  BossCharacter.last&.name.to_s, "Fischl"
@@ -65,8 +65,8 @@ class Admin::BossCharactersControllerTest < ActionDispatch::IntegrationTest
         description: "un personnage 3 étoiles",
         is_weekly_boss: true,
         recommended_level: 50,
-        region_location: "Fontaine",
-        exact_location: "la chambre des secret "
+        fight_region_location: "Fontaine",
+        fight_exact_location: "la chambre des secret "
       }
     }
     end
@@ -75,7 +75,7 @@ class Admin::BossCharactersControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to new_admin_boss_character_path
 
-    assert_includes flash[:error], "#{I18n.t("boss_character.new.record_invalid")}, Validation failed:"
+    assert_includes flash[:error], "#{I18n.t("boss_characters.new.record_invalid")}, Validation failed:"
   end
 
   test "Shouldn't be able to create a boss character if the boss's filed aren't valid" do
@@ -88,14 +88,14 @@ class Admin::BossCharactersControllerTest < ActionDispatch::IntegrationTest
         description: "un personnage 3 étoiles",
         is_weekly_boss: true,
         recommended_level: "",
-        region_location: "ffff",
-        exact_location: ""
+        fight_region_location: "Montstadt",
+        fight_exact_location: ""
       }
     }
     end
 
     assert_response :redirect
     assert_redirected_to new_admin_boss_character_path
-    assert_includes flash[:error], "#{I18n.t("boss_character.new.record_invalid")}, Validation failed:"
+    assert_includes flash[:error], "#{I18n.t("boss_characters.new.record_invalid")}, Validation failed:"
   end
 end
