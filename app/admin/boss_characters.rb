@@ -10,7 +10,8 @@ ActiveAdmin.register BossCharacter do
          row :description
          row :region
          row :rarity
-         row :location
+         row :location do |boss|
+            "#{boss.fight_region_location} - #{boss.fight_exact_location}" end
          row :is_weekly_boss
          row :recommended_level
          row :created_at
