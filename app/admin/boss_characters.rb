@@ -32,7 +32,7 @@ ActiveAdmin.register BossCharacter do
          f.li "#{I18n.t("boss_characters.new.fill_in_the_fight_location_of_a_boss")}", style: "font-weight: 650; color: grey"
          f.input :fight_region_location, as: :select, required: true, collection: BossCharacter.fight_region_locations.keys
          f.input :fight_exact_location, as: :string, required: true, label: "Specific location"
-         f.input :is_weekly_boss, as: :select, include_blank: false
+         f.input :is_weekly_boss, as: :radio
       end
       actions
    end
