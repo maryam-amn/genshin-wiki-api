@@ -11,6 +11,10 @@ en:
       fill_in_the_fight_location_of_a_boss: "Fill in to find out where the character can be found"
       notice: "The boss character was successfully created !"
       record_invalid: "The boss character can't be created"
+    destroy:
+      notice: "The boss character was successfully deleted !"
+    active_record_error:
+      record_not_found: "This boss character wasn't found"
   characters:
       new:
         add: "Add a Character"
