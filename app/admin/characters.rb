@@ -7,6 +7,10 @@ ActiveAdmin.register Character do
   filter :characterable_type, as: :select, collection: proc { Character.characterable_types }, label: "Characters Type"
 
   action_item :get, only: :index  do
+    link_to I18n.t("boss_characters.new.create_title"), new_admin_boss_character_path
+  end
+
+  action_item :get, only: :index  do
     link_to "New playable a character", new_admin_playable_character_path
   end
     index do
