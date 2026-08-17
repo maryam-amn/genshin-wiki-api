@@ -10,18 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_20_125249) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_30_123748) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "fight_region_locations", ["Liyue", "Montstadt", "Inazuma", "Sumeru", "Fontaine", "Natlan", "Nod-Krai", "Snezhnaya", "Khaenri'ah"]
   create_enum "regions", ["Liyue", "Fontaine", "Montstadt"]
 
   create_table "boss_characters", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.string "fight_exact_location"
+    t.enum "fight_region_location", null: false, enum_type: "fight_region_locations"
     t.boolean "is_weekly_boss", default: false
-    t.string "location"
     t.integer "recommended_level"
     t.datetime "updated_at", null: false
   end
