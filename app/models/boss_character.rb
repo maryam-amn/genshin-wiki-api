@@ -2,22 +2,10 @@ class BossCharacter < ApplicationRecord
   include Characterable
   delegate :name, :description, :rarity, :region, :characterable_type, to: :character, allow_nil: true
 
-  validates :is_weekly_boss, presence: true, inclusion: { within: [ true, false ] }
-  validates :location, presence: true
   validates :recommended_level, presence: true
+  enum :fight_region_location, %w[ Liyue Montstadt Inazuma Sumeru Fontaine Natlan Nod-Krai Snezhnaya Khaenri'ah].index_by(&:itself)
 
-  attr_accessor :region_location, :exact_location
-
-  validates :region_location, inclusion: { in: [ "Liyue", "Fontaine", "Monstadt" ] }, allow_blank: true
-  validates :exact_location, format: { with: /\A[a-zA-Z0-9 ]+\z/ }, allow_blank: true
-
-  before_validation :set_location
-
-  def set_location
-    if region_location.present? && exact_location.present?
-      self.location = "#{region_location} - #{exact_location}"
-    else
-      self.location
-    end
-  end
+  validates :fight_region_location, presence: { message: I18n.t("boss_characters.model_message_errors.must_be_presence_of_fight_region_location") }
+  validates :fight_exact_location, format: { without: /[!@#$%^*()-=_+|;:<>?]/ },
+            presence: { message: I18n.t("boss_characters.model_message_errors.character_presence") }
 end

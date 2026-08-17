@@ -1,14 +1,17 @@
 ---
 en:
-  boss_character:
-      new:
-        create_title: "Create a new boss character"
-        details_boss: "Details of the boss character"
-        details_character: "Details of a character"
-        location_notice: "Fill in the fields about the boss character :"
-        notice: "The boss character was successfully created !"
-        record_invalid: "The boss character can't be created"
-      destroy:
+  boss_characters:
+    model_message_errors:
+      must_be_presence_of_fight_region_location: "choose a region from the list, we need it to know where to fight him/her"
+      character_presence: "There must the exact location, please fill in the field"
+    new:
+      create_title: "Create a new boss character"
+      details_boss: "Details of a boss character"
+      details_character: "Details of a character"
+      fill_in_the_fight_location_of_a_boss: "Fill in to find out where the character can be found"
+      notice: "The boss character was successfully created !"
+      record_invalid: "The boss character can't be created"
+    destroy:
         notice: "The boss character was successfully deleted !"
       active_record_error:
         record_not_found: "This boss character wasn't found"

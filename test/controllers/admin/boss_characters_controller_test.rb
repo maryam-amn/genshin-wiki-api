@@ -31,25 +31,25 @@ class Admin::BossCharactersControllerTest < ActionDispatch::IntegrationTest
 
   test "Should create a new boss character if all the fields have been completed" do
     assert_difference -> { Character.count } => +1, -> { BossCharacter.count } => +1 do
-    post admin_boss_characters_path, params: {
-      boss_character: {
-        name: "Fischl",
-        region: "Montstadt",
-        rarity: 3,
-        description: "un personnage 3 étoiles",
-        is_weekly_boss: true,
-        recommended_level: 50,
-        region_location: "Fontaine",
-        exact_location: "la chambre des secret"
+      post admin_boss_characters_path, params: {
+        boss_character: {
+          name: "Fischl",
+          region: "Montstadt",
+          rarity: 3,
+          description: "un personnage 3 étoiles",
+          is_weekly_boss: true,
+          recommended_level: 50,
+          fight_region_location: "Fontaine",
+          fight_exact_location: "la chambre des secret"
+        }
       }
-    }
     end
 
     assert_response :redirect
 
     assert_redirected_to admin_boss_character_path(BossCharacter.last.id)
 
-    assert_equal flash[:notice], I18n.t("boss_character.new.notice")
+    assert_equal flash[:notice], I18n.t("boss_characters.new.notice")
 
     assert_equal  BossCharacter.last&.recommended_level, 50
     assert_equal  BossCharacter.last&.name.to_s, "Fischl"
@@ -57,46 +57,46 @@ class Admin::BossCharactersControllerTest < ActionDispatch::IntegrationTest
 
   test "Shouldn't be able to create a boss character if the character's field aren't valid" do
     assert_difference -> { Character.count } => 0, -> { BossCharacter.count } => 0 do
-    post admin_boss_characters_path, params: {
-      boss_character: {
-        name: "Fischl",
-        region: "",
-        rarity: "",
-        description: "un personnage 3 étoiles",
-        is_weekly_boss: true,
-        recommended_level: 50,
-        region_location: "Fontaine",
-        exact_location: "la chambre des secret "
+      post admin_boss_characters_path, params: {
+        boss_character: {
+          name: "Fischl",
+          region: "",
+          rarity: "",
+          description: "un personnage 3 étoiles",
+          is_weekly_boss: true,
+          recommended_level: 50,
+          fight_region_location: "Fontaine",
+          fight_exact_location: "la chambre des secret "
+        }
       }
-    }
-    end
+      end
 
     assert_response :redirect
 
     assert_redirected_to new_admin_boss_character_path
 
-    assert_includes flash[:error], "#{I18n.t("boss_character.new.record_invalid")}, Validation failed:"
+    assert_includes flash[:error], "#{I18n.t("boss_characters.new.record_invalid")}, Validation failed:"
   end
 
   test "Shouldn't be able to create a boss character if the boss's filed aren't valid" do
     assert_difference -> { Character.count } => 0, -> { BossCharacter.count } => 0 do
-    post admin_boss_characters_path, params: {
-      boss_character: {
-        name: "Fischl",
-        region: "Fontaine",
-        rarity: 2,
-        description: "un personnage 3 étoiles",
-        is_weekly_boss: true,
-        recommended_level: "",
-        region_location: "ffff",
-        exact_location: ""
+      post admin_boss_characters_path, params: {
+        boss_character: {
+          name: "Fischl",
+          region: "Fontaine",
+          rarity: 2,
+          description: "un personnage 3 étoiles",
+          is_weekly_boss: true,
+          recommended_level: "",
+          fight_region_location: "Montstadt",
+          fight_exact_location: ""
+        }
       }
-    }
     end
 
     assert_response :redirect
     assert_redirected_to new_admin_boss_character_path
-    assert_includes flash[:error], "#{I18n.t("boss_character.new.record_invalid")}, Validation failed:"
+    assert_includes flash[:error], "#{I18n.t("boss_characters.new.record_invalid")}, Validation failed:"
   end
 
   test "Should be able to delete a boss character" do
