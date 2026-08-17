@@ -55,10 +55,10 @@ ActiveAdmin.register BossCharacter do
          ActiveRecord::Base.transaction do
             @boss_character.character.destroy!
          end
-         flash[:notice] = I18n.t("boss_character.destroy.notice")
+         flash[:notice] = I18n.t("boss_characters.destroy.notice")
          redirect_to admin_characters_path
       rescue ActiveRecord::RecordNotDestroyed  => e
-         flash[:error] = "#{@boss_characters.character.errors[:base].to_a.join}, #{e} "
+         flash[:error] = "#{@boss_character.character.errors[:base].to_a.join}, #{e} "
          redirect_to admin_boss_character_path(@boss_character.id)
       end
 

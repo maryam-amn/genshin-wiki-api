@@ -108,7 +108,7 @@ class Admin::BossCharactersControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
 
     assert_redirected_to admin_characters_path
-    assert_equal flash[:notice], I18n.t("boss_character.destroy.notice")
+    assert_equal flash[:notice], I18n.t("boss_characters.destroy.notice")
   end
 
   test "Shouldn't be able to delete a boss character if the character is a legendary one" do
@@ -130,6 +130,6 @@ class Admin::BossCharactersControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
 
     assert_redirected_to admin_characters_path
-    assert_includes flash[:error], I18n.t("boss_character.active_record_error.record_not_found")
+    assert_includes flash[:error], I18n.t("boss_characters.active_record_error.record_not_found")
   end
 end
