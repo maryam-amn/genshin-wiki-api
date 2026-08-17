@@ -80,6 +80,9 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+      # we need the ‘libvips’ library to be able to run the tests.
+      - name: Install libvips
+        run: sudo apt-get install -y libvips
 
       - name: Run tests
         env:
