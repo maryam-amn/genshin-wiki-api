@@ -8,7 +8,7 @@ class Api::V1::BossCharactersController < ApiController
   returns code: 200
 
   def index
-    boss_character = BossCharacter.all.map { |boss_character| BossCharacterJson.new(boss_character:).to_h }
-    render json: { boss_characters: boss_character }, status: 200
+    boss_characters = BossCharacter.all.map { |boss_character| BossCharacterJson.new(boss_character:).to_h }
+    render json: { boss_characters: boss_characters }, status: 200
   end
 end
