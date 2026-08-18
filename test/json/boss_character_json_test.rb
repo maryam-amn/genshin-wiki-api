@@ -1,7 +1,7 @@
 require "test_helper"
 
 class BossCharacterJsonTest  < ActiveSupport::TestCase
-  test "Should get a character json" do
+  test "Should get a boss character serialized in JSON" do
     boss_character = boss_characters(:andrius_from_mondsatdt)
 
     expected_json = {
