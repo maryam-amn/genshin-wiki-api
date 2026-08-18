@@ -132,4 +132,145 @@ class Admin::BossCharactersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to admin_characters_path
     assert_includes flash[:error], I18n.t("boss_characters.active_record_error.record_not_found")
   end
+
+  test "Should be able to update a boss character using a PATCH request" do
+    boss_character = boss_characters(:signora_from_mondsatdt)
+
+    patch admin_boss_character_path(id: boss_character.id), params: {
+      boss_character: {
+        description: "Signora ou par son alias « La Demoiselle », était la Huitième Exécutrice des Fatui.",
+        rarity: 4,
+        is_weekly_boss: false,
+        fight_exact_location: "Donjon «Chambre d'Or»"
+      }
+    }
+
+    assert_response :redirect
+    assert_redirected_to admin_boss_character_path(boss_character.id)
+
+    boss_character.reload
+    assert_equal flash[:notice], I18n.t("boss_characters.update.notice")
+
+    assert_equal 4, boss_character.rarity
+    assert_equal "Donjon «Chambre d'Or»", boss_character.fight_exact_location
+  end
+
+  test "Shouldn't be able to update a boss character when a required field is missing using a PATCH request" do
+    boss_character = boss_characters(:andrius_from_mondsatdt)
+
+    patch admin_boss_character_path(boss_character.id), params: {
+      boss_character: {
+        description: "Andrius, aussi connu sous le nom de “Loup du Nord” ou “Borée”, est un ancien dieu de Mondstadt.",
+        rarity: 3,
+        is_weekly_boss: false,
+        fight_region_location: ""
+      }
+    }
+
+    assert_response :redirect
+    assert_redirected_to edit_admin_boss_character_path
+
+    boss_character.reload
+
+    assert_includes flash[:error], I18n.t("boss_characters.update.record_invalid")
+
+    assert_not_equal 3, boss_character.rarity
+    assert_not_equal false, boss_character.is_weekly_boss
+  end
+
+  test "Shouldn't be able to update a boss character when a validation failed using the PATCH request" do
+    boss_characters = boss_characters(:signora_from_mondsatdt)
+
+    patch admin_boss_character_path(boss_characters.id), params: {
+      boss_character: {
+        description: "Signora ou par son alias « La Demoiselle », était la Huitième Exécutrice des Fatui.",
+        rarity: 9,
+        is_weekly_boss: false
+      }
+    }
+
+    assert_response :redirect
+    assert_redirected_to edit_admin_boss_character_path(boss_characters.id)
+
+    assert_includes flash[:error], I18n.t("boss_characters.update.record_invalid")
+
+    assert_not_equal 9, boss_characters.rarity
+    assert_not_equal false, boss_characters.is_weekly_boss
+  end
+
+  test "Should be able to update a boss character using a PUT request" do
+    boss_character = boss_characters(:signora_from_mondsatdt)
+
+    put admin_boss_character_path(boss_character.id), params: {
+      boss_character: {
+        name: "Signora",
+        region: "Montstadt",
+        rarity: 3,
+        description: "Rosalyne-Kruzchka Lohefalter, également appelée Signora, était la Huitième Exécutrice des Fatui.",
+        is_weekly_boss: true,
+        recommended_level: 30,
+        fight_region_location: "Inazuma",
+        fight_exact_location: "Donjon «Chambre d'Or»"
+      }
+    }
+
+    assert_response :redirect
+    assert_redirected_to admin_boss_character_path(boss_character.id)
+
+    boss_character.reload
+    assert_equal flash[:notice], I18n.t("boss_characters.update.notice")
+
+    assert_equal 3, boss_character.rarity
+    assert_equal "Donjon «Chambre d'Or»", boss_character.fight_exact_location
+  end
+
+  test "Shouldn't be able to update a boss character when a required field is missing using a PUT request" do
+    boss_character = boss_characters(:signora_from_mondsatdt)
+
+    put admin_boss_character_path(boss_character.id), params: {
+      boss_character: {
+        name: "Signora",
+        region: "Montstadt",
+        rarity: 3,
+        description: "Rosalyne-Kruzchka Lohefalter, également appelée Signora, était la Huitième Exécutrice des Fatui.",
+        is_weekly_boss: true,
+        recommended_level: 30,
+        fight_region_location: "Montstadt",
+        fight_exact_location: ""
+      }
+    }
+
+    assert_response :redirect
+
+    assert_redirected_to edit_admin_boss_character_path(boss_character.id)
+    boss_character.reload
+    assert_includes flash[:error], I18n.t("boss_characters.update.record_invalid")
+
+    assert_not_equal 3, boss_character.rarity
+    assert_not_equal "Montstadt", boss_character.fight_region_location
+  end
+
+  test "Shouldn't be able to update a boss character when a validation failed using a PUT request" do
+    boss_character = boss_characters(:signora_from_mondsatdt)
+
+    put admin_boss_character_path(boss_character.id), params: {
+      boss_character: {
+        name: "Stormterror",
+        region: "Montstadt",
+        rarity: 3,
+        description: "Rosalyne-Kruzchka Lohefalter, également appelée Signora, était la Huitième Exécutrice des Fatui.",
+        is_weekly_boss: true,
+        recommended_level: 32,
+        fight_region_location: "Liyue",
+        fight_exact_location: "l'île Narukami «Tenshukaku»"
+      }
+    }
+    assert_response :redirect
+    assert_redirected_to edit_admin_boss_character_path(boss_character.id)
+
+    assert_includes flash[:error], I18n.t("boss_characters.update.record_invalid")
+
+    assert_not_equal 3, boss_character.rarity
+    assert_not_equal 32, boss_character.recommended_level
+  end
 end
