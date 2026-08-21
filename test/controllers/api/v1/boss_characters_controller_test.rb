@@ -37,4 +37,68 @@ class Api::V1::BossCharacterControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal expected_error_message.as_json, response.parsed_body[:error]
   end
+
+  test "Should be able to create a new boss character" do
+    assert_difference [ -> { BossCharacter.count }, -> { Character.count } ], +1  do
+      post api_v1_boss_characters_url, params: {
+          name: "lll",
+          region: "Montstadt",
+          rarity: 3,
+          description: "Rosalyne-Kruzchka Lohefalter, également appelée Signora, était la Huitième Exécutrice des Fatui.",
+          is_weekly_boss: true,
+          recommended_level: 32,
+          fight_region_location: "Liyue",
+          fight_exact_location: "l'île Narukami «Tenshukaku»"
+      }
+    end
+    assert_response :success
+
+    boss_character = BossCharacter.last
+    boss_character_to_json =  BossCharacterJson.new(boss_character:).to_h
+    assert_equal response.parsed_body, boss_character_to_json.as_json
+  end
+
+  test "Should not be able to create a boss character if a character's field validation failed" do
+    assert_difference -> { Character.count } => 0, -> { BossCharacter.count } => 0 do
+      post api_v1_boss_characters_url, params: {
+        name: "",
+        region: "Montstadt",
+        rarity: 3,
+        description: "Rosalyne-Kruzchka Lohefalter, également appelée Signora, était la Huitième Exécutrice des Fatui.",
+        is_weekly_boss: true,
+        recommended_level: 32,
+        fight_region_location: "Liyue",
+        fight_exact_location: "l'île test"
+      }
+    end
+    assert_response :unprocessable_entity
+
+    expected_error_message = { error: I18n.t("boss_characters.new.record_invalid"), details: { field: [ "Validation failed: Name can't be blank" ] } }
+    assert_equal response.parsed_body,  expected_error_message.as_json
+
+    assert_not_equal BossCharacter.last.fight_exact_location, "l'île test"
+    assert_not_equal BossCharacter.last.name, ""
+  end
+
+  test "Should not be able to create a boss character if validation of a boss character's field failed" do
+    assert_difference -> { Character.count } => 0, -> { BossCharacter.count } => 0 do
+      post api_v1_boss_characters_url, params: {
+        name: "test_02",
+        region: "Montstadt",
+        rarity: 3,
+        description: "Rosalyne-Kruzchka Lohefalter, également appelée Signora, était la Huitième Exécutrice des Fatui.",
+        is_weekly_boss: false,
+        recommended_level: 30,
+        fight_region_location: "Liyue",
+        fight_exact_location: "l'île !!"
+      }
+    end
+    assert_response :unprocessable_entity
+
+    expected_error_message = { error: I18n.t("boss_characters.new.record_invalid"), details: { field: [ "Validation failed: Fight exact location is invalid" ] } }
+    assert_equal response.parsed_body,  expected_error_message.as_json
+
+    assert_not_equal BossCharacter.last.fight_exact_location, "l'île !!"
+    assert_not_equal BossCharacter.last.name, "test_02"
+  end
 end
