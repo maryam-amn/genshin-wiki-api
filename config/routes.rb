@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :characters
       resources :playable_characters
+      resources :boss_characters
     end
   end
 end
