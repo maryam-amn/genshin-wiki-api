@@ -2,8 +2,8 @@ ActiveAdmin.register BossCharacter do
    menu false
 
    permit_params :is_weekly_boss, :recommended_level, :fight_region_location, :fight_exact_location
-   actions :all, except: [ :update ]
-   before_action :find_boss_character, only: [ :destroy, :show ]
+   actions :all
+   before_action :find_boss_character, only: [ :destroy, :show, :update ]
 
    show do
       attributes_table do
@@ -20,7 +20,7 @@ ActiveAdmin.register BossCharacter do
       end
    end
 
-   form title: I18n.t("boss_characters.new.create_title") do |f|
+   form do |f|
       f.semantic_errors
       f.inputs I18n.t("boss_characters.new.details_character") do
          f.input :name
@@ -33,7 +33,7 @@ ActiveAdmin.register BossCharacter do
          f.li "#{I18n.t("boss_characters.new.fill_in_the_fight_location_of_a_boss")}", style: "font-weight: 650; color: grey"
          f.input :fight_region_location, as: :select, required: true, collection: BossCharacter.fight_region_locations.keys
          f.input :fight_exact_location, as: :string, required: true, label: "Specific location"
-         f.input :is_weekly_boss, as: :radio
+         f.input :is_weekly_boss
       end
       actions
    end
@@ -60,6 +60,18 @@ ActiveAdmin.register BossCharacter do
       rescue ActiveRecord::RecordNotDestroyed  => e
          flash[:error] = "#{@boss_character.character.errors[:base].to_a.join}, #{e} "
          redirect_to admin_boss_character_path(@boss_character.id)
+      end
+
+      def update
+         ActiveRecord::Base.transaction do
+            @boss_character.update!(boss_permitted_params)
+            @boss_character.character.update!(character_permitted_params)
+         end
+         flash[:notice] = I18n.t("boss_characters.update.notice")
+         redirect_to admin_boss_character_path(@boss_character.id)
+      rescue ActiveRecord::RecordInvalid  => e
+         flash[:error] = " #{I18n.t("boss_characters.update.record_invalid")}, #{e}"
+         redirect_to edit_admin_boss_character_path
       end
 
       def boss_permitted_params
