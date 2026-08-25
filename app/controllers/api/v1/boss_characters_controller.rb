@@ -3,7 +3,7 @@ class Api::V1::BossCharactersController < ApiController
     formats [ "json" ]
   end
 
-  before_action :find_boss_character, only: [ :show, :destroy ]
+  before_action :find_boss_character, only: [ :show, :destroy, :update ]
 
   api :GET, "api/v1/boss_characters", "list all boss characters"
   api_version "v1"
@@ -26,7 +26,7 @@ class Api::V1::BossCharactersController < ApiController
   api :POST, "api/v1/boss_characters", "create boss character"
   api_version "v1"
   returns code: 200
-  error :unprocessable_entity, "can't create a boss character who doesn't follow the model's validation"
+  error :unprocessable_content, "can't create a boss character who doesn't follow the model's validation"
 
   def create
     ActiveRecord::Base.transaction do
@@ -41,7 +41,7 @@ class Api::V1::BossCharactersController < ApiController
   api :DELETE, "/v1/boss_characters/:id", "delete an boss character"
   api_version "v1"
   returns code: 200
-  error :unprocessable_entity, "can't delete a legendary boss character who's a legendary one"
+  error :unprocessable_content, "can't delete a legendary boss character who's a legendary one"
   error :not_found, "This boss character wasn't found"
 
   def destroy
@@ -51,6 +51,30 @@ class Api::V1::BossCharactersController < ApiController
     render json: { message: I18n.t("boss_characters.destroy.notice") }, status: :ok
   rescue ActiveRecord::RecordNotDestroyed => e
     render status: :unprocessable_entity, json: { error: I18n.t("boss_characters.active_record_error.record_not_destroyed"), details: { field: [ "#{@boss_character.character.errors[:base].to_a.join("")}, #{e.message} and BossCharacter with id=#{@boss_character.id}" ] } }
+  end
+
+  api :PATCH, "v1/boss_characters/:id", "update an boss character"
+  api_version "v1"
+  returns code: 200
+  error :unprocessable_content, "can't update an boss character who doesn't follow the model's validation"
+
+  api :PUT, "/v1/boss_characters/:id", "update an boss character"
+  api_version "v1"
+  returns code: 200
+  error :unprocessable_content, "can't update an boss character who doesn't follow the model's validation"
+
+  def update
+    @boss_character.assign_attributes(boss_character_params)
+    @boss_character.character.assign_attributes(character_params)
+    if @boss_character.changed? || @boss_character.character.changed?
+      ActiveRecord::Base.transaction do
+        @boss_character.save!
+        @boss_character.character.save!
+      end
+    end
+    render json: BossCharacterJson.new(boss_character: @boss_character).to_h, status: :ok
+  rescue ActiveRecord::RecordInvalid => e
+    render status: :unprocessable_entity, json: { error: I18n.t("boss_characters.update.record_invalid"), details: { field: [ e.message ] } }
   end
 
   def find_boss_character

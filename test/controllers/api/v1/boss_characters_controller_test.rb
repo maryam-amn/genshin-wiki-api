@@ -137,4 +137,131 @@ class Api::V1::BossCharacterControllerTest < ActionDispatch::IntegrationTest
 
     assert_includes response.parsed_body[:details][:field].to_json, I18n.t("characters.destroy.should_not_delete_legendary_character")
   end
+
+  test "Should be able to update a boss character using PATCH request" do
+    boss_character = boss_characters(:andrius_from_mondsatdt)
+    patch api_v1_boss_character_url(boss_character.id), params: {
+        description: "Andrius, aussi connu sous le nom de “Loup du Nord” ou “Borée”, est un ancien dieu de Mondstadt.",
+        rarity: 3,
+        is_weekly_boss: false,
+        fight_exact_location: "Territoire des Loups sauvage"
+    }
+
+    assert_response :ok
+    boss_character.reload
+
+    expected_response = BossCharacterJson.new(boss_character:).to_h
+    assert_equal response.parsed_body, expected_response.as_json
+
+    assert_equal 3, boss_character.reload.rarity
+    assert_equal "Territoire des Loups sauvage", boss_character.reload.fight_exact_location
+  end
+
+  test "Should be able to update a boss character using PUT request" do
+    boss_character = boss_characters(:signora_from_mondsatdt)
+
+    put api_v1_boss_character_url(boss_character.id), params: {
+      name: "Signorsa",
+      rarity: 4,
+      region: "Montstadt",
+      description: "Rosalyne-Kruzchka Lohefalter, également appelée Signora ou par son alias « La Demoiselle », était la Huitième Exécutrice des Fatui et une antagoniste de soutien dans les premiers chapitres.",
+      fight_region_location: "Inazuma",
+      fight_exact_location: "l'île Narukami «Tenshukaku»",
+      is_weekly_boss: true,
+      recommended_level: 35
+    }
+
+    assert_response :ok
+    boss_character.reload
+
+    expected_response = BossCharacterJson.new(boss_character:).to_h
+    assert_equal response.parsed_body, expected_response.as_json
+
+    assert_equal 4, boss_character.rarity
+    assert_equal 35, boss_character.recommended_level
+  end
+
+  test "Shouldn't be able to update a character when a character's required field is missing using a PATCH request" do
+    boss_character = boss_characters(:andrius_from_mondsatdt)
+
+    patch api_v1_boss_character_url(boss_character.id), params: {
+      description: "",
+      rarity: 3,
+      is_weekly_boss: false,
+      fight_exact_location: "Territoire des Loups sauvage"
+    }
+
+    assert_response :unprocessable_entity
+
+    assert_includes response.parsed_body[:error], I18n.t("boss_characters.update.record_invalid")
+    assert_includes response.parsed_body[:details][:field].to_json, "Validation failed:"
+
+    assert_not_equal 3, boss_character.rarity
+    assert_not_equal "Territoire des Loups sauvage", boss_character.fight_exact_location
+  end
+
+  test "Shouldn't be able to update a character when a character's required field is missing using a PUT request" do
+    boss_character = boss_characters(:signora_from_mondsatdt)
+
+    put api_v1_boss_character_url(boss_character.id), params: {
+      name: "Signorsa",
+      rarity: 4,
+      region: "Montstadt",
+      description: "",
+      fight_region_location: "Liyue",
+      fight_exact_location: "l'île Narukami «Tenshukaku»",
+      is_weekly_boss: true,
+      recommended_level: 30
+    }
+
+    assert_response :unprocessable_entity
+
+    assert_equal response.parsed_body[:error], I18n.t("boss_characters.update.record_invalid")
+    assert_includes response.parsed_body[:details][:field].to_json, "Validation failed:"
+
+    assert_not_equal 4, boss_character.rarity
+    assert_not_equal "Liyue", boss_character.fight_exact_location
+  end
+
+  test "Shouldn't be able to update a boss character when a boss character's required field is missing using PATCH request" do
+    boss_character = boss_characters(:andrius_from_mondsatdt)
+
+    patch api_v1_boss_character_url(boss_character.id), params: {
+      description: "Andrius, aussi connu sous le nom de “Loup du Nord” ou “Borée”, est un ancien dieu de Mondstadt.",
+      rarity: 3,
+      is_weekly_boss: false,
+      fight_exact_location: ""
+    }
+
+    assert_response :unprocessable_content
+
+    assert_includes response.parsed_body[:error], I18n.t("boss_characters.update.record_invalid")
+    assert_includes response.parsed_body[:details][:field].to_json, "Validation failed:"
+
+    assert_not_equal 3, boss_character.rarity
+    assert_not_equal "", boss_character.fight_exact_location
+  end
+
+  test "Shouldn't be able to update a boss character when a boss character's required field is missing using PUT request" do
+    boss_character = boss_characters(:signora_from_mondsatdt)
+
+    put api_v1_boss_character_url(boss_character.id), params: {
+      name: "Signorsa",
+      rarity: 4,
+      region: "Montstadt",
+      description: "Rosalyne-Kruzchka Lohefalter, également appelée Signora ou par son alias « La Demoiselle », était la Huitième Exécutrice des Fatui et une antagoniste de soutien dans les premiers chapitres.",
+      fight_region_location: "Liyue",
+      fight_exact_location: "",
+      is_weekly_boss: true,
+      recommended_level: 32
+    }
+
+    assert_response :unprocessable_entity
+
+    assert_equal response.parsed_body[:error], I18n.t("boss_characters.update.record_invalid")
+    assert_includes response.parsed_body[:details][:field].to_json, "Validation failed:"
+
+    assert_not_equal 4, boss_character.rarity
+    assert_not_equal 32, boss_character.recommended_level
+  end
 end
