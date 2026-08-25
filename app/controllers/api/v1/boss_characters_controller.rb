@@ -50,7 +50,10 @@ class Api::V1::BossCharactersController < ApiController
     end
     render json: { message: I18n.t("boss_characters.destroy.notice") }, status: :ok
   rescue ActiveRecord::RecordNotDestroyed => e
-    render status: :unprocessable_entity, json: { error: I18n.t("boss_characters.active_record_error.record_not_destroyed"), details: { field: [ "#{@boss_character.character.errors[:base].to_a.join("")}, #{e.message} and BossCharacter with id=#{@boss_character.id}" ] } }
+    render status: :unprocessable_entity, json: {
+      error: I18n.t("boss_characters.active_record_error.record_not_destroyed"),
+      details: { field: [ @boss_character.character.errors[:base].to_a.join(" "), e.message ] }
+    }
   end
 
   def find_boss_character

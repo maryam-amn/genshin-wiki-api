@@ -15,7 +15,7 @@ en:
       notice: "The boss character was successfully deleted !"
     active_record_error:
       record_not_found: "This boss character wasn't found"
-      record_not_destroyed: "the boss character wasn't deleted!"
+      record_not_destroyed: "The boss character wasn't deleted!"
     update:
       notice: "Boss character successfully updated !"
       record_invalid: "Boss character can't be updated"

@@ -135,6 +135,6 @@ class Api::V1::BossCharacterControllerTest < ActionDispatch::IntegrationTest
 
     assert_includes response.parsed_body[:error], I18n.t("boss_characters.active_record_error.record_not_destroyed")
 
-    assert_includes response.parsed_body[:details][:field].to_json, I18n.t("characters.destroy.should_not_delete_legendary_character")
+    assert_includes response.parsed_body[:details][:field], I18n.t("characters.destroy.should_not_delete_legendary_character").as_json
   end
 end
