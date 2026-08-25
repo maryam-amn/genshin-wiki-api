@@ -6,7 +6,6 @@ class BossCharacterJsonTest  < ActiveSupport::TestCase
 
     expected_json = {
       id: 1016727073,
-      character_id: 805628297,
       name: "Andrius",
       rarity: 0,
       region: "Montstadt",

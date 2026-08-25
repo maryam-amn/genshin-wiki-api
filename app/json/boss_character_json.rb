@@ -6,7 +6,6 @@ class BossCharacterJson
   def to_h
     {
       id: @boss_character.id,
-      character_id: @boss_character.character.id,
       name: @boss_character.name,
       rarity: @boss_character.rarity,
       region: @boss_character.region,
