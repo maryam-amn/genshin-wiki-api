@@ -49,10 +49,10 @@ class Api::V1::BossCharactersController < ApiController
       @boss_character.character.destroy!
     end
     render json: { message: I18n.t("boss_characters.destroy.notice") }, status: :ok
-  rescue ActiveRecord::RecordNotDestroyed => e
+  rescue ActiveRecord::RecordNotDestroyed
     render status: :unprocessable_entity, json: {
       error: I18n.t("boss_characters.active_record_error.record_not_destroyed"),
-      details: { field: [ @boss_character.character.errors[:base].to_a.join(" "), e.message ] }
+      details: { field: @boss_character.character.errors[:base].concat(@boss_character.errors[:base]) }
     }
   end
 
