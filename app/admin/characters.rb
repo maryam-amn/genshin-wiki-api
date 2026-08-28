@@ -1,7 +1,8 @@
 ActiveAdmin.register Character do
   permit_params :name, :region, :rarity, :description, :character_id
   before_action :find_character, only: [ :show, :edit ]
-  actions :all, except: [ :destroy, :update ]
+  actions :all, except: [ :destroy, :update, :create, :new ]
+
   filter :rarity
   filter :region, as: :select, collection: proc { Character.regions.keys }
   filter :characterable_type, as: :select, collection: proc { Character.characterable_types }, label: "Characters Type"
@@ -11,18 +12,19 @@ ActiveAdmin.register Character do
   end
 
   action_item :get, only: :index  do
-    link_to "New playable a character", new_admin_playable_character_path
+    link_to I18n.t("playable_characters.new"), new_admin_playable_character_path
   end
-    index do
-      column :name
-      column :region
-      column :rarity
-      column :description do |character|
-        character.description.truncate(150)
-      end
-      column :characterable_type
-      actions
+
+  index do
+    column :name
+    column :region
+    column :rarity
+    column :description do |character|
+      character.description.truncate(150)
     end
+    column :characterable_type
+    actions
+  end
 
   form title: I18n.t("characters.new.add") do |f|
     f.object.errors.full_messages
@@ -34,29 +36,29 @@ ActiveAdmin.register Character do
       f.input :description, as: :text, required: true
     end
     actions
-    end
+  end
 
-    controller do
-      def show
-        if @character.characterable_type == "PlayableCharacter"
-          redirect_to admin_playable_character_path(id: @character.characterable_id)
-        elsif @character.characterable_type == "BossCharacter"
-          redirect_to admin_boss_character_path(id: @character.characterable_id)
-        end
-      end
-
-      def edit
-        if @character.characterable_type == "PlayableCharacter"
-          redirect_to edit_admin_playable_character_path(id: @character.characterable_id)
-        elsif @character.characterable_type == "BossCharacter"
-          redirect_to edit_admin_boss_character_path(id: @character.characterable_id)
-        end
-      end
-
-      private
-
-      def find_character
-        @character = Character.find(params[:id]) if params[:id].present?
+  controller do
+    def show
+      if @character.characterable_type == "PlayableCharacter"
+        redirect_to admin_playable_character_path(id: @character.characterable_id)
+      elsif @character.characterable_type == "BossCharacter"
+        redirect_to admin_boss_character_path(id: @character.characterable_id)
       end
     end
+
+    def edit
+      if @character.characterable_type == "PlayableCharacter"
+        redirect_to edit_admin_playable_character_path(id: @character.characterable_id)
+      elsif @character.characterable_type == "BossCharacter"
+        redirect_to edit_admin_boss_character_path(id: @character.characterable_id)
+      end
+    end
+
+    private
+
+    def find_character
+      @character = Character.find(params[:id]) if params[:id].present?
+    end
+  end
   end
