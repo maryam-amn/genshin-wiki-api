@@ -101,4 +101,40 @@ class Api::V1::BossCharacterControllerTest < ActionDispatch::IntegrationTest
     assert_not_equal BossCharacter.last.fight_exact_location, "l'île !!"
     assert_not_equal BossCharacter.last.name, "test_02"
   end
+
+  test "Should be able to delete a boss character" do
+    boss_character = boss_characters(:andrius_from_mondsatdt)
+
+    assert_difference [ -> { BossCharacter.count }, -> { Character.count } ], -1 do
+      delete api_v1_boss_character_url(id: boss_character.id)
+    end
+
+    assert_response :ok
+    expected_success_message = { message: I18n.t("boss_characters.destroy.notice") }
+    assert_equal response.parsed_body, expected_success_message.as_json
+  end
+
+  test "Shouldn't be able to delete a boss character that doesn't exist in the database" do
+    assert_difference -> { Character.count } => 0, -> { BossCharacter.count } => 0 do
+      delete api_v1_boss_character_url(id: 0)
+    end
+
+    assert_response :not_found
+
+    assert_equal response.parsed_body[:error], I18n.t("boss_characters.active_record_error.record_not_found")
+  end
+
+  test "Shouldn't be able to delete a boss character who's a legendary one" do
+    boss_character = boss_characters(:signora_from_mondsatdt)
+
+    assert_difference -> { Character.count } => 0, -> { BossCharacter.count } => 0 do
+      delete api_v1_boss_character_url(id: boss_character.id)
+    end
+
+    assert_response :unprocessable_entity
+
+    assert_includes response.parsed_body[:error], I18n.t("boss_characters.active_record_error.record_not_destroyed")
+
+    assert_includes response.parsed_body[:details][:field], I18n.t("characters.destroy.should_not_delete_legendary_character").as_json
+  end
 end

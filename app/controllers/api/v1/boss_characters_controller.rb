@@ -3,7 +3,7 @@ class Api::V1::BossCharactersController < ApiController
     formats [ "json" ]
   end
 
-  before_action :find_boss_character, only: [ :show ]
+  before_action :find_boss_character, only: [ :show, :destroy ]
 
   api :GET, "api/v1/boss_characters", "list all boss characters"
   api_version "v1"
@@ -36,6 +36,24 @@ class Api::V1::BossCharactersController < ApiController
     render json: BossCharacterJson.new(boss_character: @boss_character).to_h, status: :created
   rescue ActiveRecord::RecordInvalid => e
     render status: :unprocessable_entity, json: { error: I18n.t("boss_characters.new.record_invalid"), details: { field: [ e.message ] } }
+  end
+
+  api :DELETE, "/v1/boss_characters/:id", "delete an boss character"
+  api_version "v1"
+  returns code: 200
+  error :unprocessable_entity, "can't delete a legendary boss character who's a legendary one"
+  error :not_found, "This boss character wasn't found"
+
+  def destroy
+    ActiveRecord::Base.transaction do
+      @boss_character.character.destroy!
+    end
+    render json: { message: I18n.t("boss_characters.destroy.notice") }, status: :ok
+  rescue ActiveRecord::RecordNotDestroyed
+    render status: :unprocessable_entity, json: {
+      error: I18n.t("boss_characters.active_record_error.record_not_destroyed"),
+      details: { field: @boss_character.character.errors[:base].concat(@boss_character.errors[:base]) }
+    }
   end
 
   def find_boss_character
