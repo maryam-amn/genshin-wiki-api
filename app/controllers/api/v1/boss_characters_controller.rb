@@ -54,10 +54,6 @@ class Api::V1::BossCharactersController < ApiController
   end
 
   api :PATCH, "v1/boss_characters/:id", "update an boss character"
-  api_version "v1"
-  returns code: 200
-  error :unprocessable_content, "can't update an boss character who doesn't follow the model's validation"
-
   api :PUT, "/v1/boss_characters/:id", "update an boss character"
   api_version "v1"
   returns code: 200
