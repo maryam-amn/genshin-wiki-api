@@ -5,10 +5,26 @@ class CharacterTest < ActiveSupport::TestCase
     character = Character.new(name: "Ayato",
                               description: "Un personnage 5 étoiles Hydro jouable dans Genshin Impact, épéiste à une main et chef du Clan Kamisato à Inazuma.",
                               rarity: 5,
-                              region: "Montstadt")
+                              region: "Montstadt",
+                              characterable: PlayableCharacter.create!(
+                                base_hp: 333,
+                                base_defense: 200,
+                                base_attack: 200,
+                                is_limited: true)
+    )
 
     assert character.rarity.between?(0, 5)
     assert character.valid?
+  end
+
+  test "Should not create a character if the type is not specified" do
+    character = Character.new(name: "Ayato",
+                              description: "Un personnage 5 étoiles Hydro jouable dans Genshin Impact, épéiste à une main et chef du Clan Kamisato à Inazuma.",
+                              rarity: 5,
+                              region: "Montstadt")
+
+    assert_not character.valid?
+    assert character.errors[:characterable].any?
   end
 
   test "Shouldn't create a character if there isn't a name" do
