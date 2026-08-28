@@ -197,7 +197,7 @@ GEM
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
     language_server-protocol (3.17.0.6)
-    lefthook (2.1.10)
+    lefthook (2.1.11)
     lint_roller (1.1.0)
     logger (1.7.0)
     loofah (2.25.2)
@@ -524,7 +524,7 @@ CHECKSUMS
   kaminari-activerecord (1.2.2) sha256=0dd3a67bab356a356f36b3b7236bcb81cef313095365befe8e98057dd2472430
   kaminari-core (1.2.2) sha256=3bd26fec7370645af40ca73b9426a448d09b8a8ba7afa9ba3c3e0d39cdbb83ff
   language_server-protocol (3.17.0.6) sha256=5ef2c0c138f8267e1bc631d3328347d354f96724b0af22f2c79516120443b7f0
-  lefthook (2.1.10) sha256=cc9c06bd8ea689e8b8016eab9769e54d696d07951860c1c6d28e8f6812e61b65
+  lefthook (2.1.11) sha256=1f199b3c2fb12c9d281c92c34edf25a1215675fd373486ccb87428947a73e089
   lint_roller (1.1.0) sha256=2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
   loofah (2.25.2) sha256=2007f746959ac65552456e04b433e83deb22759ab38c838b4445c70e43425918
