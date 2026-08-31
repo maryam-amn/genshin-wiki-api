@@ -61,4 +61,4 @@ ActiveAdmin.register Character do
       @character = Character.find(params[:id]) if params[:id].present?
     end
   end
-  end
+end
