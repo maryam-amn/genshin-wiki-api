@@ -1,6 +1,5 @@
 class Character < ApplicationRecord
-  delegated_type :characterable, types: %w[ PlayableCharacter BossCharacter ], dependent: :destroy,
-                 optional: true
+  delegated_type :characterable, types: %w[ PlayableCharacter BossCharacter ], dependent: :destroy
   delegate :who_am_i, to: :characterable
 
   validates :name, presence: true, uniqueness: true
