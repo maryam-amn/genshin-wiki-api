@@ -125,25 +125,25 @@ Devise.setup do |config|
   # a value of 20 is already extremely slow: approx. 60 seconds for 1 calculation).
   config.stretches = Rails.env.test? ? 1 : 12
 
-   # Set up a pepper to generate the hashed password.
-   # config.pepper = '288e64f32665ed3b9fa207d17cf4477731076d1526fadbc0da24c7dc6fdb97dd7a20ea6229d68f0f773322abe05a4bf372ed7aee8aafd1b0e707525288a02cde'
+  # Set up a pepper to generate the hashed password.
+  # config.pepper = '288e64f32665ed3b9fa207d17cf4477731076d1526fadbc0da24c7dc6fdb97dd7a20ea6229d68f0f773322abe05a4bf372ed7aee8aafd1b0e707525288a02cde'
 
-   # Send a notification to the original email when the user's email is changed.
-   # config.send_email_changed_notification = false
+  # Send a notification to the original email when the user's email is changed.
+  # config.send_email_changed_notification = false
 
-   # Send a notification email when the user's password is changed.
-   # config.send_password_change_notification = false
+  # Send a notification email when the user's password is changed.
+  # config.send_password_change_notification = false
 
-   # ==> Configuration for :confirmable
-   # A period that the user is allowed to access the website even without
-   # confirming their account. For instance, if set to 2.days, the user will be
-   # able to access the website for two days without confirming their account,
-   # access will be blocked just in the third day.
-   # You can also set it to nil, which will allow the user to access the website
-   # without confirming their account.
-   # Default is 0.days, meaning the user cannot access the website without
-   # confirming their account.
-   config.allow_unconfirmed_access_for = 7.days
+  # ==> Configuration for :confirmable
+  # A period that the user is allowed to access the website even without
+  # confirming their account. For instance, if set to 2.days, the user will be
+  # able to access the website for two days without confirming their account,
+  # access will be blocked just in the third day.
+  # You can also set it to nil, which will allow the user to access the website
+  # without confirming their account.
+  # Default is 0.days, meaning the user cannot access the website without
+  # confirming their account.
+  # config.allow_unconfirmed_access_for = 7.days
 
   # A period that the user is allowed to confirm their account before their
   # token becomes invalid. For example, if set to 3.days, the user can confirm
@@ -199,8 +199,8 @@ Devise.setup do |config|
   # :none            = No lock strategy. You should handle locking by yourself.
   config.lock_strategy = :both
 
-   # Defines which key will be used when locking and unlocking an account
-   config.unlock_keys = [ :email ]
+  # Defines which key will be used when locking and unlocking an account
+  config.unlock_keys = [ :email ]
 
   # Defines which strategy will be used to unlock an account.
   # :email = Sends an unlock link to the user email
@@ -229,26 +229,26 @@ Devise.setup do |config|
   # change their passwords.
   config.reset_password_within = 6.hours
 
-    # When set to false, does not sign a user in automatically after their password is
-    # reset. Defaults to true, so a user is signed in automatically after a reset.
-    # config.sign_in_after_reset_password = true
+  # When set to false, does not sign a user in automatically after their password is
+  # reset. Defaults to true, so a user is signed in automatically after a reset.
+  # config.sign_in_after_reset_password = true
 
-    # ==> Configuration for :encryptable
-    # Allow you to use another hashing or encryption algorithm besides bcrypt (default).
-    # You can use :sha1, :sha512 or algorithms from others authentication tools as
-    # :clearance_sha1, :authlogic_sha512 (then you should set stretches above to 20
-    # for default behavior) and :restful_authentication_sha1 (then you should set
-    # stretches to 10, and copy REST_AUTH_SITE_KEY to pepper).
-    #
-    # Require the `devise-encryptable` gem when using anything other than bcrypt
-    # config.encryptor = :sha512
+  # ==> Configuration for :encryptable
+  # Allow you to use another hashing or encryption algorithm besides bcrypt (default).
+  # You can use :sha1, :sha512 or algorithms from others authentication tools as
+  # :clearance_sha1, :authlogic_sha512 (then you should set stretches above to 20
+  # for default behavior) and :restful_authentication_sha1 (then you should set
+  # stretches to 10, and copy REST_AUTH_SITE_KEY to pepper).
+  #
+  # Require the `devise-encryptable` gem when using anything other than bcrypt
+  # config.encryptor = :sha512
 
-    # ==> Scopes configuration
-    # Turn scoped views on. Before rendering "sessions/new", it will first check for
-    # "users/sessions/new". It's turned off by default because it's slower if you
-    # are using only default views.
-    #
-    config.scoped_views = false
+  # ==> Scopes configuration
+  # Turn scoped views on. Before rendering "sessions/new", it will first check for
+  # "users/sessions/new". It's turned off by default because it's slower if you
+  # are using only default views.
+
+  config.scoped_views = false
 
   # Configure the default scope given to Warden. By default it's the first
   # devise role declared in your routes (usually :user).
