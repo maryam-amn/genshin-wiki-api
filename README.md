@@ -13,7 +13,6 @@ add them to their collection, add a comment or rate them.
 ### Initial set up
 - Run the command below
 ```bash
-bundle install 
 rails db:prepare db:create db:migrate db:fixtures:load
 ```
 - it will
@@ -36,12 +35,3 @@ Open your browser and go to <http://127.0.0.1:3000/>
   - password : password
 
 => if you want to change it, you can change in [db/seeds.rb](db/seeds.rb)
-
-### Intercepter les mail localement  
-- lancer cet commande dans le terminal pour avoir àccés a un outils 
-
-  http://0.0.0.0:1080
-  
-```bash
-  docker run -p 1080:1080 -p 1025:1025 sj26/mailcatcher
-```

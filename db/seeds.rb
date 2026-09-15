@@ -8,4 +8,4 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 # Create a user to be able to be connnected
-User.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
+User.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
