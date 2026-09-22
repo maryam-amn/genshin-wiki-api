@@ -35,3 +35,18 @@ Open your browser and go to <http://127.0.0.1:3000/>
   - password : password
 
 => if you want to change it, you can change in [db/seeds.rb](db/seeds.rb)
+
+### Preview email 
+we have two way to previews/view the emails send to a user :
+
+Rails : 
+-  To have the preview of all emails, Launch the server, and go to :
+    - http://localhost:3000/rails/mailers/devise_mailer
+
+Docker :
+- Run the command below 
+    - it will catch the email received by the user with `mailctacher`, and we can view it at http://localhost:1080/
+
+```bash
+docker run -it -p 1080:1080 -p 1025:1025 --name mailcatcher stpaquet/alpinemailcatcher
+ ```
