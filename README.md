@@ -28,7 +28,7 @@ rails server
 
 Open your browser and go to <http://127.0.0.1:3000/>
 
-### Connect to a the admin user
+### Connect to the admin user
 - run `rails db::seed`
 - Connect to this user with 
   - email : admin@example.com
