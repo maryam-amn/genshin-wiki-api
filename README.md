@@ -29,7 +29,7 @@ rails server
 Open your browser and go to <http://127.0.0.1:3000/>
 
 ### Connect to a the admin user
-- run db::seed 
+- run `rails db::seed`
 - Connect to this user with 
   - email : admin@example.com
   - password : password
@@ -40,7 +40,7 @@ Open your browser and go to <http://127.0.0.1:3000/>
 we have two way to previews/view the emails send to a user :
 
 Rails : 
--  To have the preview of all emails, Launch the server, and go to :
+-  To have the preview of all emails, launch the server, and go to :
     - http://localhost:3000/rails/mailers/devise_mailer
 
 Docker :
