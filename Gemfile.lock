@@ -186,18 +186,18 @@ GEM
       sshkit (>= 1.23.0, < 2.0)
       thor (~> 1.3)
       zeitwerk (>= 2.6.18, < 3.0)
-    kaminari (1.3.0)
+    kaminari (1.3.3)
       activesupport (>= 4.1.0)
-      kaminari-actionview (= 1.3.0)
-      kaminari-activerecord (= 1.3.0)
-      kaminari-core (= 1.3.0)
-    kaminari-actionview (1.3.0)
+      kaminari-actionview (= 1.3.3)
+      kaminari-activerecord (= 1.3.3)
+      kaminari-core (= 1.3.3)
+    kaminari-actionview (1.3.3)
       actionview
-      kaminari-core (= 1.3.0)
-    kaminari-activerecord (1.3.0)
+      kaminari-core (= 1.3.3)
+    kaminari-activerecord (1.3.3)
       activerecord
-      kaminari-core (= 1.3.0)
-    kaminari-core (1.3.0)
+      kaminari-core (= 1.3.3)
+    kaminari-core (1.3.3)
     language_server-protocol (3.17.0.6)
     lefthook (2.2.2)
     lint_roller (1.1.0)
@@ -533,10 +533,10 @@ CHECKSUMS
   jquery-rails (4.6.1) sha256=619f3496cdcdeaae1fd6dafa52dbac3fc45b745d4e09712da4184a16b3a8d9c0
   json (2.21.2) sha256=1f1d3b7cf2b3ba1a69beca0bb6db13d5438b80bff3cd54cdaaa620b9b07c1c6a
   kamal (2.12.0) sha256=c51d1ab085e515470f98d0c0f043637122b5ebf76e8b610cb1fbbed0b7f9b8fa
-  kaminari (1.3.0) sha256=428bb00736f0afd56bcc28ee7d45afa368b47921ce6432c7d94fc471434a6043
-  kaminari-actionview (1.3.0) sha256=3842d495088b70f70261227176cc88e17bacf2a0c94fd551c27ac0cec9d1d170
-  kaminari-activerecord (1.3.0) sha256=8ee8a85bffac0ea5098afb178dc9096c9f2a70481f9779b08a3fe31d80ad1827
-  kaminari-core (1.3.0) sha256=b783beb552f0b24ec8cfd9ffc7cffc0bf63fd0cd843c60382d075a7e56315b3e
+  kaminari (1.3.3) sha256=92e59eebb4da655136e631435bb339088449183b1c677fc52bc00d4792dfd0de
+  kaminari-actionview (1.3.3) sha256=c4a3938d920d7149989ec2044580c64256f5280bf441c80bb077c4fd88500960
+  kaminari-activerecord (1.3.3) sha256=4d871b4d0014f49c801d5afac386ef62436320df600dd5561313a9acf2163043
+  kaminari-core (1.3.3) sha256=3120cbe13f41872a60a9019756a4d957c346d497938efd6c1e560b30c36c95f4
   language_server-protocol (3.17.0.6) sha256=5ef2c0c138f8267e1bc631d3328347d354f96724b0af22f2c79516120443b7f0
   lefthook (2.2.2) sha256=c43405b5fd14cd6de0dad8bfb76895767e8f21bb342460f6434191b32c5be333
   lint_roller (1.1.0) sha256=2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87
